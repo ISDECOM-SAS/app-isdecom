@@ -1,3 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Servicios - ISDECOM</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#008fcc">
+    <link rel="apple-touch-icon" href="icono.png">
+    <style>
+        :root { --azul-principal: #008fcc; --azul-oscuro: #008cc7; --gris-texto: #313231; --gris-claro: #453e43; --fondo-app: #f4f7f6; }
+        body, input, select, textarea, button, .tab { font-family: 'Calibri', sans-serif; font-size: 12px; text-transform: uppercase; }
+        body { background-color: var(--fondo-app); margin: 0; padding: 10px; color: var(--gris-texto); }
+        .form-container { background: white; max-width: 500px; margin: 10px auto; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
+        .header-container { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; position: relative; }
+        .logo-isdecom { max-width: 150px; height: auto; margin-bottom: 5px; }
+        h2 { color: var(--azul-principal); margin: 0 0 5px 0; font-size: 14px; text-align: center;}
+        label { font-weight: 600; display: block; margin-top: 12px; color: var(--gris-texto); }
+        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; transition: 0.3s; }
+        input[type="file"] { padding: 8px; background-color: #f8f9fa; border: 1px dashed #ccc; }
+        input:focus, select:focus, textarea:focus { border-color: var(--azul-principal); outline: none; }
+        .dos-columnas { display: flex; gap: 10px; } .columna { flex: 1; }
+        button.btn-accion { width: 100%; background-color: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        .loader { display: none; text-align: center; margin-top: 15px; color: var(--azul-principal); font-weight: bold; }
+        #loginScreen { text-align: center; margin-top: 40px; }
+        .pin-input { text-align: center; font-size: 20px; letter-spacing: 10px; font-weight: bold; color: var(--azul-principal); }
+        .tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; background-color: white; }
+        .tab { flex: 1 1 30%; text-align: center; padding: 8px 5px; font-weight: bold; cursor: pointer; color: var(--gris-texto); background-color: #f0f0f0; border-radius: 6px; }
+        .tab.activa { background-color: var(--azul-principal); color: white; }
+        .tab span { font-size: 14px; margin-bottom: 3px; display: block; }
+        .seccion-formulario { display: none; } .seccion-formulario.activa { display: block; }
+        #btnSalir { position: absolute; top: 0; right: 0; background: #fce8e6; color: #c53929; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; }
+        .checkbox-container { display: flex; align-items: center; gap: 8px; color: var(--azul-principal); cursor: pointer; background: #e5f4fb; padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<datalist id="opcionesClientes"></datalist>
+
+<div class="form-container" id="loginScreen">
+    <div class="header-container"><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom">
+    <h2>ACCESO AL SISTEMA</h2></div>
+    
+    <label>SELECCIONE SU USUARIO:</label>
+    <select id="userInput" style="text-align: center; font-size: 14px; font-weight: bold;">
+        <option value="" disabled selected>-- SELECCIONE --</option>
+        <option value="JUAN CAMILO COY">JUAN CAMILO COY</option>
+        <option value="ANDRES FELIPE HENAO">ANDRES FELIPE HENAO</option>
+        <option value="CAMILO HERRERA">CAMILO HERRERA</option>
+        <option value="JUAN FELIPE LOPEZ">JUAN FELIPE LOPEZ</option>
+        <option value="FELIPE DE LOS RIOS">FELIPE DE LOS RIOS</option>
+        <option value="FRANCISCO SANCHEZ">FRANCISCO SANCHEZ</option>
+        <option value="MAURICIO">MAURICIO</option>
+        <option value="ISDECOM">ISDECOM</option>
+    </select>
+    
+    <label>CONTRASEÑA:</label>
+    <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off">
+    
+    <p id="errorPin" style="color: #e11d48; display: none; font-weight: bold; margin-top: 10px; text-align: center;">❌ CONTRASEÑA INCORRECTA</p>
+    <button id="btnDesbloquear" class="btn-accion">🔒 INGRESAR</button>
+</div>
+
+<div class="form-container" id="appScreen" style="display: none;">
+    <div class="header-container"><button id="btnSalir">🔒 SALIR</button><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom"></div>
+
+    <div class="tabs">
+        <div class="tab activa" onclick="cambiarPestana('reporte')"><span>📝</span> REPORTE</div>
+        <div class="tab" onclick="cambiarPestana('agenda')"><span>📅</span> AGENDA</div>
+        <div class="tab" onclick="cambiarPestana('dispositivos')"><span>🔬</span> LAB.</div>
+        <div class="tab" onclick="cambiarPestana('copy')"><span>🖨️</span> IMPRESORAS</div>
+        <div class="tab" onclick="cambiarPestana('electronicos')"><span>🔌</span> ELECTRÓNICOS</div>
+        <div class="tab" onclick="cambiarPestana('semaforo')"><span>🚦</span> SEMÁFORO</div>
+    </div>
+    
+    <div id="seccionReporte" class="seccion-formulario activa">
+        <h2>REPORTE DE SERVICIO</h2>
+        <form id="formReporte">
+            <label>FECHA *</label><input type="date" id="fechaR" required>
+            <div class="dos-columnas"><div class="columna"><label>INICIO *</label><input type="time" id="horaInicioR" required></div><div class="columna"><label>FINAL *</label><input type="time" id="horaFinalR" required></div></div>
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" required>
+            <label>SEDE</label><input type="text" id="sedeR">
+            
+            <label>TIPO DE VISITA *</label>
+            <select id="tipoVisitaR" required>
+                <option value="" disabled selected>SELECCIONE...</option>
+                <option>MANTENIMIENTO</option>
+                <option>REPARACIÓN</option>
+                <option>INSTALACIÓN</option>
+                <option>PROYECTO</option>
+                <option>COTIZACIÓN</option>
+                <option>REVISIÓN</option>
+                <option>OTRO</option>
+            </select>
+
+            <label>DESCRIPCIÓN *</label><textarea id="servicioR" rows="2" required></textarea>
+            <label>MATERIALES *</label><textarea id="materialesR" rows="2" required></textarea>
+            <label>ESTADO *</label><select id="estadoR" required><option>REALIZADO</option><option>EN PROCESO</option><option>PENDIENTE</option></select>
+            <label>EVIDENCIAS (FOTOS Y VIDEOS)</label>
+            <input type="file" id="fotoUploadR" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
+            <label>TÉCNICO *</label><select id="tecnicoR" required><option value="" disabled selected>SELECCIONE...</option><option>JUAN CAMILO COY</option><option>ANDRES FELIPE HENAO</option><option>CAMILO HERRERA</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option><option>FRANCISCO SANCHEZ</option><option>ALEXANDER</option><option>MAURICIO</option><option>COPY</option><option>ISDECOM</option></select>
+            <button type="submit" id="btnEnviarR" class="btn-accion">ENVIAR</button>
+            <div class="loader" id="loaderR">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+
+    <div id="seccionAgenda" class="seccion-formulario">
+        <h2>AGENDAR SERVICIO</h2>
+        <form id="formAgenda">
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteA" class="inputClienteCompartido" required>
+            
+            <label class="checkbox-container">
+                <input type="checkbox" id="syncCalendarA" style="width: 20px; height: 20px; margin: 0;"> 
+                📅 AGENDAR EN GOOGLE CALENDAR
+            </label>
+
+            <label>TAREA *</label><textarea id="tareaA" rows="2" required></textarea>
+            
+            <div class="dos-columnas">
+                <div class="columna"><label>FECHA *</label><input type="date" id="fechaA" required></div>
+                <div class="columna"><label>HORA (Opcional)</label><input type="time" id="horaA"></div>
+            </div>
+
+            <label>ASIGNADO *</label><select id="asignadoA" required><option value="" disabled selected>SELECCIONE...</option><option>ISDECOM</option></select>
+            <label>ESTADO *</label><select id="estadoA" required><option>PENDIENTE</option></select>
+            <label>OBSERVACIONES</label><textarea id="observacionesA" rows="2"></textarea>
+            <button type="submit" id="btnEnviarA" class="btn-accion">AGENDAR</button>
+            <div class="loader" id="loaderA">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+
+    <div id="seccionDispositivos" class="seccion-formulario">
+        <h2>LABORATORIO</h2>
+        <form id="formDispositivos">
+            <label>FECHA INGRESO *</label><input type="date" id="fechaD" required>
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteD" class="inputClienteCompartido" required>
+            <div class="dos-columnas">
+                <div class="columna"><label>TELÉFONO *</label><input type="text" id="telefonoD" required></div>
+                <div class="columna"><label>CONTRASEÑA *</label><input type="text" id="contrasenaD" required></div>
+            </div>
+            <label>EQUIPO/MARCA/MODELO/SERIAL *</label><textarea id="equipoD" rows="2" required></textarea>
+            <label>ACTIVIDAD *</label><textarea id="actividadD" rows="2" required></textarea>
+            <label>ESTADO *</label><select id="estadoD" required><option value="" disabled selected>SELECCIONE...</option><option>PENDIENTE</option></select>
+            <label>OBSERVACIONES</label><textarea id="observacionesD" rows="2"></textarea>
+            <label>EVIDENCIAS INGRESO</label>
+            <input type="file" id="fotoUploadD" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
+            <button type="submit" id="btnEnviarD" class="btn-accion">REGISTRAR</button>
+            <div class="loader" id="loaderD">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+
+    <div id="seccionCopy" class="seccion-formulario">
+        <h2>MÓDULO COPY</h2>
+        <form id="formCopy">
+            <label>FECHA *</label><input type="date" id="fechaC" required>
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteC" class="inputClienteCompartido" required>
+            <label>ACTIVIDAD *</label><textarea id="actividadC" rows="2" required></textarea>
+            <label>TÉCNICO QUE DEJA *</label><select id="tecnicoDejaC" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>JUAN CAMILO COY</option><option>ANDRES FELIPE HENAO</option><option>CAMILO HERRERA</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option><option>FRANCISCO SANCHEZ</option><option>ALEXANDER</option><option>MAURICIO</option><option>COPY</option></select>
+            <label>EVIDENCIAS INGRESO</label>
+            <input type="file" id="fotoUploadC" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
+            <label>OBSERVACIONES</label><textarea id="observacionesC" rows="2"></textarea>
+            <label>ESTADO *</label><select id="estadoC" required><option value="" disabled selected>SELECCIONE...</option><option>PENDIENTE</option></select>          
+            <button type="submit" id="btnEnviarC" class="btn-accion">REGISTRAR</button>
+            <div class="loader" id="loaderC">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+
+    <div id="seccionElectronicos" class="seccion-formulario">
+        <h2>ELECTRÓNICOS</h2>
+        <form id="formElectronicos">
+            <label>FECHA *</label><input type="date" id="fechaE" required>
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteE" class="inputClienteCompartido" required>
+            <label>DISPOSITIVO *</label><textarea id="actividadE" rows="2" required></textarea>
+            <label>OBSERVACIONES</label><textarea id="observacionesE" rows="2"></textarea>
+            <label>ESTADO *</label><select id="estadoE" required><option value="" disabled selected>SELECCIONE...</option><option>PENDIENTE</option></select>
+            <label>ELECTRÓNICO *</label><select id="electronicoE" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>ALEXANDER RAMIREZ</option><option>LAPTECH</option></select>
+            <button type="submit" id="btnEnviarE" class="btn-accion">REGISTRAR</button>
+            <div class="loader" id="loaderE">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+
+    <div id="seccionSemaforo" class="seccion-formulario">
+        <h2>SEMÁFORO TAREAS</h2>
+        <form id="formSemaforo">
+            <label>FECHA *</label><input type="date" id="fechaS" required>
+            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteS" class="inputClienteCompartido" required>
+            <label>ACTIVIDAD *</label><textarea id="actividadS" rows="2" required></textarea>
+            <label>ESTADO *</label><select id="estadoS" required><option>PENDIENTE</option></select>
+            <div class="dos-columnas">
+                <div class="columna">
+                    <label>ASIGNADO POR *</label>
+                    <select id="asignadoPorS" required><option value="" disabled selected>SELECCIONE...</option><option>SIN ASIGNAR</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option></select>
+                </div>
+                <div class="columna">
+                    <label>REVISADO POR</label>
+                    <select id="revisadoPorS"><option value="" disabled selected>SELECCIONE...</option><option>SIN ASIGNAR</option><option>JUAN CAMILO COY</option><option>FRANCISCO SANCHEZ</option></select>
+                </div>
+            </div>
+            <label>TIPO CLIENTE *</label>
+            <select id="tipoClienteS" required><option value="" disabled selected>SELECCIONE...</option><option>CONTRATO</option><option>PARTICULAR</option><option>VIP</option></select>
+            <label>OBSERVACIONES</label><textarea id="observacionesS" rows="2"></textarea>
+            <button type="submit" id="btnEnviarS" class="btn-accion">GUARDAR</button>
+            <div class="loader" id="loaderS">GUARDANDO... ⏳</div>
+        </form>
+    </div>
+</div>
+
 <script>
     // ==========================================
     // 🔐 GESTIÓN DE USUARIOS Y CONTRASEÑAS
@@ -9,6 +216,7 @@
         "JUAN FELIPE LOPEZ": "5370",
         "FELIPE DE LOS RIOS": "1397",
         "FRANCISCO SANCHEZ": "1803",
+        "MAURICIO": "8888",
         "ISDECOM": "5593"
     };
 
@@ -111,7 +319,6 @@
             let agendarCal = document.getElementById('syncCalendarA').checked;
             d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), horaServicio: v('horaA'), cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: v('estadoA'), observaciones: v('observacionesA')}; 
         }
-        // MODIFICADO: Ahora mandamos el Teléfono, Equipo y Contraseña por separado
         else if (tipo==="dispositivos") { 
             d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: v('estadoD'), observaciones: v('observacionesD')}; 
         }
@@ -122,9 +329,6 @@
         fetch(apiURL, { method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(d) })
         .then(r => r.json()).then(res => {
             
-            // =================================================================
-            // 📲 WHATSAPP
-            // =================================================================
             if (tipo === 'reporte') {
                 const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n" +
                                   "👷‍♂️ *Técnico:* " + v('tecnicoR') + "\n" +
@@ -144,3 +348,5 @@
     }
     function v(id) { return document.getElementById(id) ? document.getElementById(id).value : ""; }
 </script>
+</body>
+</html>
