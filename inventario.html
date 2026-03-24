@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario Admin - ISDECOM</title>
-    <meta name="theme-color" content="#0f172a">
+    <meta name="theme-color" content="#f1f5f9">
     <style>
         :root {
-            --primary: #2563eb; /* Azul Rey Moderno */
+            --primary: #2563eb; 
             --primary-dark: #1e40af;
             --bg-color: #f1f5f9;
             --card-bg: #ffffff;
@@ -16,18 +16,20 @@
             --border-color: #e2e8f0;
             --success: #10b981;
             --danger: #ef4444;
+            /* ✅ NUEVO: Color de Navbar Claro Corporativo */
+            --navbar-bg: #e2e8f0; 
         }
         body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; text-transform: uppercase; font-size: 13px; }
         
-        /* 🔵 BARRA SUPERIOR (NAVBAR) */
-        .navbar { background-color: #0f172a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .navbar img { height: 35px; filter: brightness(0) invert(1); /* Pone el logo blanco */ }
-        .navbar h1 { margin: 0; font-size: 15px; letter-spacing: 1px; color: #cbd5e1; display: flex; align-items: center; gap: 8px;}
-        .btn-logout { background: #334155; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; transition: 0.2s;}
-        .btn-logout:hover { background: #475569; }
+        /* ✅ 🔵 BARRA SUPERIOR (NAVBAR) CORREGIDA */
+        .navbar { background-color: var(--navbar-bg); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: var(--text-main); box-shadow: 0 1px 3px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .navbar img { height: 35px; display: block; filter: none !important; /* Muestra logo original sin filtros */ }
+        .navbar h1 { margin: 0; font-size: 14px; letter-spacing: 1px; color: var(--azul-oscuro); display: flex; align-items: center; gap: 8px; font-weight: 800;}
+        .btn-logout { background: #cbd5e1; color: var(--text-main); border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 11px; transition: 0.2s;}
+        .btn-logout:hover { background: #94a3b8; }
         
         /* 📦 CONTENEDOR PRINCIPAL */
-        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; padding-bottom: 30px;}
         
         /* 🗂️ PESTAÑAS MODERNAS */
         .nav-tabs { display: flex; background: var(--card-bg); border-radius: 10px; padding: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid var(--border-color);}
@@ -37,7 +39,7 @@
         /* 🃏 TARJETAS DE CONTENIDO */
         .card { background: var(--card-bg); border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: none; border: 1px solid var(--border-color); }
         .card.activa { display: block; }
-        .card h2 { margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        .card h2 { margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
         
         /* 📝 FORMULARIOS */
         label { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 15px; display: block; }
@@ -51,7 +53,7 @@
         .btn-secundario { background-color: #f1f5f9; color: var(--primary-dark); border: 1px solid #cbd5e1; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; transition: 0.2s;}
         .btn-secundario:hover { background-color: #e2e8f0; }
 
-        /* 🔘 SELECTOR DE OPERACIÓN (INGRESO/RETIRO) */
+        /* 🔘 SELECTOR DE MOVIMIENTO */
         .op-container { display: flex; gap: 15px; margin-top: 8px; }
         .op-box { flex: 1; }
         .op-box input { display: none; }
@@ -59,14 +61,39 @@
         .op-box input:checked + label.lbl-ingreso { border-color: var(--success); background-color: #ecfdf5; color: #065f46; }
         .op-box input:checked + label.lbl-retiro { border-color: var(--danger); background-color: #fef2f2; color: #991b1b; }
         
-        /* 📊 TABLAS DE DATOS */
-        .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 10px;}
-        table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 400px; background: white;}
-        th { background-color: #f8fafc; color: var(--text-muted); padding: 12px; text-align: left; font-weight: 800; border-bottom: 2px solid var(--border-color); white-space: nowrap;}
-        td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        /* 📊 ✅ TABLAS CON SLIDER (overflow-y limited) */
+        .table-title { color: var(--text-muted); font-size: 12px; margin-top: 20px; font-weight: bold; margin-bottom: 8px; display: block; }
+        
+        .table-slider-container {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow-y: auto; /* ✅ Habilita el slider vertical */
+            margin-bottom: 10px;
+            background: white;
+            /* ✅ NUEVO: Limitar altura a unas 5-6 líneas (aprox 240px) */
+            max-height: 240px; 
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 400px; }
+        
+        /* ✅ Cabecera Sticky (se queda fija al usar el slider) */
+        th { 
+            background-color: #f8fafc; 
+            color: var(--text-muted); 
+            padding: 12px; 
+            text-align: left; 
+            font-weight: 800; 
+            border-bottom: 2px solid var(--border-color); 
+            white-space: nowrap;
+            position: sticky; /* ✅ NUEVO: Fija la cabecera */
+            top: 0;
+            z-index: 10;
+        }
+        
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; color: var(--text-main);}
         tr:hover td { background-color: #f1f5f9; }
         
-        /* 🏷️ ETIQUETAS REDONDEADAS (BADGES) */
+        /* 🏷️ BADGES */
         .badge { padding: 5px 10px; border-radius: 20px; font-weight: 800; font-size: 12px; display: inline-block; text-align: center; min-width: 25px;}
         .bg-green { background-color: #d1fae5; color: #065f46; }
         .bg-red { background-color: #fee2e2; color: #991b1b; }
@@ -75,7 +102,7 @@
         /* 🔐 PANTALLA LOGIN */
         .login-wrapper { max-width: 400px; margin: 60px auto; padding: 0 15px; }
         .login-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid var(--border-color); }
-        .login-card img { max-width: 150px; margin-bottom: 15px; }
+        .login-card img { max-width: 150px; margin-bottom: 15px; filter: none !important;}
         .login-card .pin-input { font-size: 24px; letter-spacing: 12px; text-align: center; padding: 15px; margin-top: 10px; background: #f8fafc;}
         .loader { display: none; text-align: center; margin-top: 15px; color: var(--primary); font-weight: bold; font-size: 12px;}
     </style>
@@ -112,7 +139,7 @@
 <div id="appScreen" style="display: none;">
     
     <div class="navbar">
-        <h1><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM"> INVENTARIO</h1>
+        <h1><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM"> INVENTARIO Admin</h1>
         <button id="btnSalir" class="btn-logout">CERRAR SESIÓN</button>
     </div>
 
@@ -124,21 +151,22 @@
         </div>
         
         <div id="seccionConsulta" class="card activa">
-            <h2>📊 VISOR DE INVENTARIO</h2>
+            <h2>📊 VISOR DE STOCK REAL</h2>
             <button class="btn-secundario" onclick="cargarInventario()">🔄 ACTUALIZAR DATOS</button>
             <div class="loader" id="loaderConsulta" style="display: block;">⏳ SINCRONIZANDO CON LA BASE DE DATOS...</div>
             
             <div id="contenidoInventario" style="display: none;">
-                <h3 style="color: var(--text-muted); font-size: 12px; margin-top: 20px;">🔧 HERRAMIENTAS ACTIVAS</h3>
-                <div class="table-responsive">
+                
+                <span class="table-title">🔧 HERRAMIENTAS ACTIVAS</span>
+                <div class="table-slider-container">
                     <table id="tablaHerramientas">
                         <thead><tr><th>STOCK</th><th>DESCRIPCIÓN</th></tr></thead>
                         <tbody></tbody>
                     </table>
                 </div>
 
-                <h3 style="color: var(--text-muted); font-size: 12px; margin-top: 30px;">🔌 ACCESORIOS Y COMPONENTES</h3>
-                <div class="table-responsive">
+                <span class="table-title">🔌 ACCESORIOS Y COMPONENTES</span>
+                <div class="table-slider-container">
                     <table id="tablaAccesorios">
                         <thead><tr><th>STOCK</th><th>MARCA / MODELO</th><th>SERIAL</th><th>P. VENTA</th></tr></thead>
                         <tbody></tbody>
@@ -148,7 +176,7 @@
         </div>
 
         <div id="seccionHerramientas" class="card">
-            <h2>🔧 GESTIÓN DE HERRAMIENTAS</h2>
+            <h2>🔧 REGISTRO DE MOVIMIENTOS - HERRAMIENTAS</h2>
             <form id="formHerramientas">
                 <label>TIPO DE MOVIMIENTO *</label>
                 <div class="op-container">
@@ -168,7 +196,7 @@
         </div>
 
         <div id="seccionAccesorios" class="card">
-            <h2>🔌 GESTIÓN DE ACCESORIOS</h2>
+            <h2>🔌 REGISTRO DE MOVIMIENTOS - ACCESORIOS</h2>
             <form id="formAccesorios">
                 <label>TIPO DE MOVIMIENTO *</label>
                 <div class="op-container">
@@ -269,7 +297,7 @@
 
     function renderTabla(idTabla, filas, tipo) {
         const tbody = document.querySelector(`#${idTabla} tbody`); tbody.innerHTML = ""; 
-        if (!filas || filas.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No hay registros disponibles.</td></tr>`; return; }
+        if (!filas || filas.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No hay registros.</td></tr>`; return; }
 
         filas.forEach(fila => {
             let cantidad = parseInt(fila[0]); 
@@ -277,8 +305,8 @@
             let badge = `<span class="badge ${claseBadge}">${cantidad}</span>`;
             
             let tr = document.createElement("tr");
-            if (tipo === "herramientas") { tr.innerHTML = `<td>${badge}</td><td style="font-weight:600; color:#334155;">${fila[1]}</td>`; } 
-            else { let pVentaFormat = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(fila[5] || 0); tr.innerHTML = `<td>${badge}</td><td><b style="color:#0f172a;">${fila[1]}</b><br><span style="color:#64748b;">${fila[2]}</span></td><td style="font-family:monospace; color:#475569;">${fila[3]}</td><td style="font-weight:bold; color:#10b981;">${pVentaFormat}</td>`; }
+            if (tipo === "herramientas") { tr.innerHTML = `<td style="width:50px; text-align:center;">${badge}</td><td style="font-weight:600; color:#334155;">${fila[1]}</td>`; } 
+            else { let pVentaFormat = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(fila[5] || 0); tr.innerHTML = `<td style="width:50px; text-align:center;">${badge}</td><td><b style="color:#0f172a;">${fila[1]}</b><br><span style="color:#64748b;">${fila[2]}</span></td><td style="font-family:monospace; color:#475569;">${fila[3]}</td><td style="font-weight:bold; color:#10b981;">${pVentaFormat}</td>`; }
             tbody.appendChild(tr);
         });
     }
