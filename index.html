@@ -2,279 +2,267 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App de Servicios - ISDECOM</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#008fcc">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ISDECOM Field Service</title>
+    <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="icono.png">
     <style>
-        :root { --azul-principal: #008fcc; --azul-oscuro: #008cc7; --gris-texto: #313231; --gris-claro: #453e43; --fondo-app: #f4f7f6; }
-        body, input, select, textarea, button, .tab { font-family: 'Calibri', sans-serif; font-size: 12px; text-transform: uppercase; }
-        body { background-color: var(--fondo-app); margin: 0; padding: 10px; color: var(--gris-texto); }
-        .form-container { background: white; max-width: 500px; margin: 10px auto; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
-        .header-container { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; position: relative; }
-        .logo-isdecom { max-width: 150px; height: auto; margin-bottom: 5px; }
-        h2 { color: var(--azul-principal); margin: 0 0 5px 0; font-size: 14px; text-align: center;}
-        label { font-weight: 600; display: block; margin-top: 12px; color: var(--gris-texto); }
-        input, select, textarea { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; transition: 0.3s; }
-        input[type="file"] { padding: 8px; background-color: #f8f9fa; border: 1px dashed #ccc; }
-        input:focus, select:focus, textarea:focus { border-color: var(--azul-principal); outline: none; }
-        .dos-columnas { display: flex; gap: 10px; } .columna { flex: 1; }
-        button.btn-accion { width: 100%; background-color: var(--azul-principal); color: white; padding: 10px; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
-        .loader { display: none; text-align: center; margin-top: 15px; color: var(--azul-principal); font-weight: bold; }
-        #loginScreen { text-align: center; margin-top: 40px; }
-        .pin-input { text-align: center; font-size: 20px; letter-spacing: 10px; font-weight: bold; color: var(--azul-principal); }
-        .tabs { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 20px; background-color: white; }
-        .tab { flex: 1 1 30%; text-align: center; padding: 8px 5px; font-weight: bold; cursor: pointer; color: var(--gris-texto); background-color: #f0f0f0; border-radius: 6px; }
-        .tab.activa { background-color: var(--azul-principal); color: white; }
-        .tab span { font-size: 14px; margin-bottom: 3px; display: block; }
-        .seccion-formulario { display: none; } .seccion-formulario.activa { display: block; }
-        #btnSalir { position: absolute; top: 0; right: 0; background: #fce8e6; color: #c53929; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; }
-        .checkbox-container { display: flex; align-items: center; gap: 8px; color: var(--azul-principal); cursor: pointer; background: #e5f4fb; padding: 10px; border-radius: 8px; margin-top: 10px; font-weight: bold; }
+        /* 🎨 VARIABLES CORPORATIVAS (Alta Gama) */
+        :root {
+            --primary: #0056b3; /* Azul Corporativo ISDECOM */
+            --primary-light: #e6f0fa;
+            --secondary: #f8fafc;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --danger: #ef4444;
+            --success: #10b981;
+            --border: #e2e8f0;
+            --bg-color: #f1f5f9;
+        }
+
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; padding-bottom: 80px; /* Espacio para el Bottom Nav */ text-transform: uppercase; font-size: 13px; }
+
+        /* 📱 HEADER ESTILO APP NATIVA */
+        .app-header { background: #ffffff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .app-header img { height: 32px; }
+        .user-badge { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; display: flex; align-items: center; gap: 5px; }
+        .btn-logout { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+
+        /* 📦 CONTENEDOR DE TARJETAS */
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        .seccion-formulario { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .seccion-formulario.activa { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* 🃏 DISEÑO DE TARJETAS (CARDS) */
+        .card { background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .card-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary-light); padding-bottom: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;}
+
+        /* 📝 INPUTS Y FORMULARIOS MODERNOS */
+        .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; }
+        input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--secondary); color: var(--text-dark); font-weight: 600; font-size: 13px; box-sizing: border-box; transition: all 0.3s ease; }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); background-color: #ffffff; outline: none; box-shadow: 0 0 0 4px var(--primary-light); }
+        textarea { resize: none; }
+        input[type="file"] { padding: 10px; border: 2px dashed var(--border); background: transparent; text-align: center; }
         
-        /* Etiqueta decorativa para mostrar el usuario logueado */
-        .user-badge { display: inline-block; background: #e8f0fe; color: #1967d2; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; margin-bottom: 10px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .checkbox-container { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--primary-light); border-radius: 10px; color: var(--primary); font-weight: 700; border: 1px solid #bfdbfe; cursor: pointer; margin-top: 10px; }
+
+        /* 🔘 BOTONES DE ALTO IMPACTO */
+        .btn-primary { width: 100%; background: var(--primary); color: white; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3); transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.5px; }
+        .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 86, 179, 0.3); }
+
+        /* 🧭 BOTTOM NAVIGATION BAR (MÓVIL) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; display: flex; justify-content: space-around; padding: 10px 5px 15px 5px; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); border-top: 1px solid var(--border); z-index: 1000; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; font-size: 10px; font-weight: 700; width: 60px; transition: 0.3s; }
+        .nav-item .icon { font-size: 20px; margin-bottom: 4px; transition: transform 0.2s; }
+        .nav-item.activa { color: var(--primary); }
+        .nav-item.activa .icon { transform: scale(1.2); }
+
+        /* 🔐 PANTALLA LOGIN */
+        #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); }
+        .login-card { background: white; padding: 40px 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); width: 100%; max-width: 350px; text-align: center; }
+        .login-card img { height: 45px; margin-bottom: 25px; }
+        .pin-input { font-size: 28px; letter-spacing: 15px; text-align: center; padding: 15px; margin-top: 10px; border: 2px solid var(--border); font-family: monospace; }
+        .pin-input:focus { border-color: var(--primary); }
+
+        /* 🔔 TOAST NOTIFICATIONS (Alertas Pro) */
+        .toast { visibility: hidden; min-width: 250px; background-color: var(--text-dark); color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        .toast.show { visibility: visible; opacity: 1; bottom: 100px; }
+        .loader-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--primary-light); border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
 <datalist id="opcionesClientes"></datalist>
 
-<div class="form-container" id="loginScreen">
-    <div class="header-container"><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom">
-    <h2>ACCESO AL SISTEMA OPERATIVO</h2></div>
-    
-    <label>SELECCIONE SU USUARIO:</label>
-    <select id="userInput" style="text-align: center; font-size: 14px; font-weight: bold;">
-        <option value="" disabled selected>-- SELECCIONE --</option>
-        <option value="JUAN CAMILO COY">JUAN CAMILO COY</option>
-        <option value="ANDRES FELIPE HENAO">ANDRES FELIPE HENAO</option>
-        <option value="CAMILO HERRERA">CAMILO HERRERA</option>
-        <option value="JUAN FELIPE LOPEZ">JUAN FELIPE LOPEZ</option>
-        <option value="FELIPE DE LOS RIOS">FELIPE DE LOS RIOS</option>
-        <option value="FRANCISCO SANCHEZ">FRANCISCO SANCHEZ</option>
-        <option value="ISDECOM">ISDECOM</option>
-    </select>
-    
-    <label>CONTRASEÑA:</label>
-    <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off">
-    
-    <p id="errorPin" style="color: #e11d48; display: none; font-weight: bold; margin-top: 10px; text-align: center;">❌ CONTRASEÑA INCORRECTA</p>
-    <button id="btnDesbloquear" class="btn-accion">🔒 INGRESAR</button>
+<div id="toast" class="toast">Notificación</div>
+
+<div id="loaderOverlay" class="loader-overlay">
+    <div style="text-align: center;">
+        <div class="spinner" style="margin: 0 auto 15px auto;"></div>
+        <div style="color: var(--primary); font-weight: 800; font-size: 14px;">PROCESANDO DATOS...</div>
+    </div>
 </div>
 
-<div class="form-container" id="appScreen" style="display: none;">
-    <div class="header-container">
-        <button id="btnSalir">🔒 SALIR</button>
-        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom">
-        <div id="displayUsuario" class="user-badge">👤 TÉCNICO: CARGANDO...</div>
-    </div>
-
-    <div class="tabs">
-        <div class="tab activa" onclick="cambiarPestana('reporte')"><span>📝</span> REPORTE</div>
-        <div class="tab" onclick="cambiarPestana('agenda')"><span>📅</span> AGENDA</div>
-        <div class="tab" onclick="cambiarPestana('dispositivos')"><span>🔬</span> LAB.</div>
-        <div class="tab" onclick="cambiarPestana('copy')"><span>🖨️</span> IMPRESORAS</div>
-        <div class="tab" onclick="cambiarPestana('electronicos')"><span>🔌</span> ELECTRÓNICOS</div>
-        <div class="tab" onclick="cambiarPestana('semaforo')"><span>🚦</span> SEMÁFORO</div>
-    </div>
-    
-    <div id="seccionReporte" class="seccion-formulario activa">
-        <h2>REPORTE DE SERVICIO</h2>
-        <form id="formReporte">
-            <label>FECHA *</label><input type="date" id="fechaR" required>
-            <div class="dos-columnas"><div class="columna"><label>INICIO *</label><input type="time" id="horaInicioR" required></div><div class="columna"><label>FINAL *</label><input type="time" id="horaFinalR" required></div></div>
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" required>
-            <label>SEDE</label><input type="text" id="sedeR">
-            
-            <label>TIPO DE VISITA *</label>
-            <select id="tipoVisitaR" required>
-                <option value="" disabled selected>SELECCIONE...</option>
-                <option>MANTENIMIENTO</option>
-                <option>REPARACIÓN</option>
-                <option>INSTALACIÓN</option>
-                <option>PROYECTO</option>
-                <option>COTIZACIÓN</option>
-                <option>REVISIÓN</option>
-                <option>OTRO</option>
+<div id="loginScreen">
+    <div class="login-card">
+        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
+        <h3 style="color: var(--text-dark); margin-bottom: 25px;">PORTAL OPERATIVO</h3>
+        
+        <div class="input-group">
+            <label style="text-align: left;">USUARIO ASIGNADO</label>
+            <select id="userInput">
+                <option value="" disabled selected>-- SELECCIONE --</option>
+                <option value="JUAN CAMILO COY">JUAN CAMILO COY</option>
+                <option value="ANDRES FELIPE HENAO">ANDRES FELIPE HENAO</option>
+                <option value="CAMILO HERRERA">CAMILO HERRERA</option>
+                <option value="JUAN FELIPE LOPEZ">JUAN FELIPE LOPEZ</option>
+                <option value="FELIPE DE LOS RIOS">FELIPE DE LOS RIOS</option>
+                <option value="FRANCISCO SANCHEZ">FRANCISCO SANCHEZ</option>
+                <option value="ISDECOM">ISDECOM</option>
             </select>
+        </div>
+        
+        <div class="input-group">
+            <label style="text-align: left;">PIN DE SEGURIDAD</label>
+            <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off" inputmode="numeric">
+        </div>
+        
+        <p id="errorPin" style="color: var(--danger); display: none; font-weight: bold; margin-top: 10px; font-size: 12px;">❌ PIN INCORRECTO</p>
+        <button id="btnDesbloquear" class="btn-primary" style="margin-top: 10px;">INICIAR SESIÓN</button>
+    </div>
+</div>
 
-            <label>DESCRIPCIÓN *</label><textarea id="servicioR" rows="2" required></textarea>
-            <label>MATERIALES *</label><textarea id="materialesR" rows="2" required></textarea>
-            <label>ESTADO DEL SERVICIO *</label><select id="estadoR" required><option>REALIZADO</option><option>EN PROCESO</option><option>PENDIENTE</option></select>
-            <label>EVIDENCIAS (FOTOS Y VIDEOS)</label>
-            <input type="file" id="fotoUploadR" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
-            <button type="submit" id="btnEnviarR" class="btn-accion">ENVIAR REPORTE</button>
-            <div class="loader" id="loaderR">GUARDANDO... ⏳</div>
-        </form>
+<div id="appScreen" style="display: none;">
+    
+    <div class="app-header">
+        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
+        <div id="displayUsuario" class="user-badge">👤 TÉCNICO</div>
+        <button id="btnSalir" class="btn-logout">🚪</button>
     </div>
 
-    <div id="seccionAgenda" class="seccion-formulario">
-        <h2>AGENDAR SERVICIO</h2>
-        <form id="formAgenda">
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteA" class="inputClienteCompartido" required>
-            
-            <label class="checkbox-container">
-                <input type="checkbox" id="syncCalendarA" style="width: 20px; height: 20px; margin: 0;"> 
-                📅 AGENDAR EN GOOGLE CALENDAR
-            </label>
-
-            <label>TAREA *</label><textarea id="tareaA" rows="2" required></textarea>
-            
-            <div class="dos-columnas">
-                <div class="columna"><label>FECHA *</label><input type="date" id="fechaA" required></div>
-                <div class="columna"><label>HORA (Opcional)</label><input type="time" id="horaA"></div>
+    <div class="container">
+        
+        <div id="seccionReporte" class="seccion-formulario activa">
+            <div class="card">
+                <h2 class="card-title">📝 REPORTE DE SERVICIO</h2>
+                <form id="formReporte">
+                    <div class="input-group"><label>FECHA DEL SERVICIO *</label><input type="date" id="fechaR" required></div>
+                    <div class="grid-2">
+                        <div class="input-group"><label>HORA INICIO *</label><input type="time" id="horaInicioR" required></div>
+                        <div class="input-group"><label>HORA FINAL *</label><input type="time" id="horaFinalR" required></div>
+                    </div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>SEDE</label><input type="text" id="sedeR"></div>
+                    <div class="input-group"><label>TIPO DE VISITA *</label>
+                        <select id="tipoVisitaR" required>
+                            <option value="" disabled selected>Seleccione el tipo...</option>
+                            <option>MANTENIMIENTO</option><option>REPARACIÓN</option><option>INSTALACIÓN</option><option>PROYECTO</option><option>COTIZACIÓN</option><option>REVISIÓN</option><option>OTRO</option>
+                        </select>
+                    </div>
+                    <div class="input-group"><label>DESCRIPCIÓN DEL TRABAJO *</label><textarea id="servicioR" rows="3" required></textarea></div>
+                    <div class="input-group"><label>MATERIALES UTILIZADOS *</label><textarea id="materialesR" rows="2" required></textarea></div>
+                    <div class="input-group"><label>ESTADO DEL SERVICIO *</label><select id="estadoR" required><option>REALIZADO</option><option>EN PROCESO</option><option>PENDIENTE</option></select></div>
+                    <div class="input-group"><label>📸 ADJUNTAR EVIDENCIAS</label><input type="file" id="fotoUploadR" accept="image/*, video/*" multiple></div>
+                    <button type="submit" class="btn-primary">ENVIAR REPORTE</button>
+                </form>
             </div>
+        </div>
 
-            <label>ASIGNADO A *</label><select id="asignadoA" required><option value="" disabled selected>SELECCIONE...</option><option>ISDECOM</option></select>
-            <label>OBSERVACIONES</label><textarea id="observacionesA" rows="2"></textarea>
-            <button type="submit" id="btnEnviarA" class="btn-accion">AGENDAR (SE GUARDARÁ COMO PENDIENTE)</button>
-            <div class="loader" id="loaderA">GUARDANDO... ⏳</div>
-        </form>
-    </div>
-
-    <div id="seccionDispositivos" class="seccion-formulario">
-        <h2>LABORATORIO</h2>
-        <form id="formDispositivos">
-            <label>FECHA INGRESO *</label><input type="date" id="fechaD" required>
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteD" class="inputClienteCompartido" required>
-            <div class="dos-columnas">
-                <div class="columna"><label>TELÉFONO *</label><input type="text" id="telefonoD" required></div>
-                <div class="columna"><label>CONTRASEÑA *</label><input type="text" id="contrasenaD" required></div>
+        <div id="seccionAgenda" class="seccion-formulario">
+            <div class="card">
+                <h2 class="card-title">📅 NUEVA CITA</h2>
+                <form id="formAgenda">
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteA" class="inputClienteCompartido" required></div>
+                    <label class="checkbox-container"><input type="checkbox" id="syncCalendarA" style="width: auto;"> Sincronizar en Google Calendar</label>
+                    <div class="input-group" style="margin-top: 15px;"><label>TAREA A REALIZAR *</label><textarea id="tareaA" rows="3" required></textarea></div>
+                    <div class="grid-2">
+                        <div class="input-group"><label>FECHA *</label><input type="date" id="fechaA" required></div>
+                        <div class="input-group"><label>HORA (Opcional)</label><input type="time" id="horaA"></div>
+                    </div>
+                    <div class="input-group"><label>ASIGNAR A *</label><select id="asignadoA" required><option value="" disabled selected>Seleccione...</option><option>ISDECOM</option></select></div>
+                    <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesA" rows="2"></textarea></div>
+                    <button type="submit" class="btn-primary">AGENDAR SERVICIO</button>
+                </form>
             </div>
-            <label>EQUIPO/MARCA/MODELO/SERIAL *</label><textarea id="equipoD" rows="2" required></textarea>
-            <label>ACTIVIDAD *</label><textarea id="actividadD" rows="2" required></textarea>
-            <label>OBSERVACIONES</label><textarea id="observacionesD" rows="2"></textarea>
-            <label>EVIDENCIAS INGRESO</label>
-            <input type="file" id="fotoUploadD" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
-            <button type="submit" id="btnEnviarD" class="btn-accion">REGISTRAR INGRESO</button>
-            <div class="loader" id="loaderD">GUARDANDO... ⏳</div>
-        </form>
-    </div>
+        </div>
 
-    <div id="seccionCopy" class="seccion-formulario">
-        <h2>MÓDULO COPY</h2>
-        <form id="formCopy">
-            <label>FECHA *</label><input type="date" id="fechaC" required>
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteC" class="inputClienteCompartido" required>
-            <label>ACTIVIDAD *</label><textarea id="actividadC" rows="2" required></textarea>
-            <label>TÉCNICO QUE DEJA *</label><select id="tecnicoDejaC" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>JUAN CAMILO COY</option><option>ANDRES FELIPE HENAO</option><option>CAMILO HERRERA</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option><option>FRANCISCO SANCHEZ</option><option>ALEXANDER</option><option>MAURICIO</option><option>COPY</option></select>
-            <label>EVIDENCIAS INGRESO</label>
-            <input type="file" id="fotoUploadC" accept="image/*, video/mp4, video/quicktime, video/webm" multiple>
-            <label>OBSERVACIONES</label><textarea id="observacionesC" rows="2"></textarea>
-            <button type="submit" id="btnEnviarC" class="btn-accion">REGISTRAR IMPRESORA</button>
-            <div class="loader" id="loaderC">GUARDANDO... ⏳</div>
-        </form>
-    </div>
-
-    <div id="seccionElectronicos" class="seccion-formulario">
-        <h2>ELECTRÓNICOS</h2>
-        <form id="formElectronicos">
-            <label>FECHA *</label><input type="date" id="fechaE" required>
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteE" class="inputClienteCompartido" required>
-            <label>DISPOSITIVO *</label><textarea id="actividadE" rows="2" required></textarea>
-            <label>OBSERVACIONES</label><textarea id="observacionesE" rows="2"></textarea>
-            <label>ELECTRÓNICO *</label><select id="electronicoE" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>ALEXANDER RAMIREZ</option><option>LAPTECH</option></select>
-            <button type="submit" id="btnEnviarE" class="btn-accion">REGISTRAR DISPOSITIVO</button>
-            <div class="loader" id="loaderE">GUARDANDO... ⏳</div>
-        </form>
-    </div>
-
-    <div id="seccionSemaforo" class="seccion-formulario">
-        <h2>SEMÁFORO TAREAS</h2>
-        <form id="formSemaforo">
-            <label>FECHA *</label><input type="date" id="fechaS" required>
-            <label>CLIENTE *</label><input list="opcionesClientes" id="clienteS" class="inputClienteCompartido" required>
-            <label>ACTIVIDAD *</label><textarea id="actividadS" rows="2" required></textarea>
-            <div class="dos-columnas">
-                <div class="columna">
-                    <label>ASIGNADO POR *</label>
-                    <select id="asignadoPorS" required><option value="" disabled selected>SELECCIONE...</option><option>SIN ASIGNAR</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option></select>
-                </div>
-                <div class="columna">
-                    <label>REVISADO POR</label>
-                    <select id="revisadoPorS"><option value="" disabled selected>SELECCIONE...</option><option>SIN ASIGNAR</option><option>JUAN CAMILO COY</option><option>FRANCISCO SANCHEZ</option></select>
-                </div>
+        <div id="seccionDispositivos" class="seccion-formulario">
+            <div class="card">
+                <h2 class="card-title">🔬 INGRESO A LABORATORIO</h2>
+                <form id="formDispositivos">
+                    <div class="input-group"><label>FECHA *</label><input type="date" id="fechaD" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteD" class="inputClienteCompartido" required></div>
+                    <div class="grid-2">
+                        <div class="input-group"><label>TELÉFONO *</label><input type="tel" id="telefonoD" required></div>
+                        <div class="input-group"><label>CONTRASEÑA *</label><input type="text" id="contrasenaD" required></div>
+                    </div>
+                    <div class="input-group"><label>DETALLES DEL EQUIPO (Marca/Modelo/SN) *</label><textarea id="equipoD" rows="2" required></textarea></div>
+                    <div class="input-group"><label>DAÑO O ACTIVIDAD REQUERIDA *</label><textarea id="actividadD" rows="3" required></textarea></div>
+                    <div class="input-group"><label>OBSERVACIONES ADICIONALES</label><textarea id="observacionesD" rows="2"></textarea></div>
+                    <div class="input-group"><label>📸 EVIDENCIAS DE INGRESO</label><input type="file" id="fotoUploadD" accept="image/*, video/*" multiple></div>
+                    <button type="submit" class="btn-primary">GENERAR TICKET</button>
+                </form>
             </div>
-            <label>TIPO CLIENTE *</label>
-            <select id="tipoClienteS" required><option value="" disabled selected>SELECCIONE...</option><option>CONTRATO</option><option>PARTICULAR</option><option>VIP</option></select>
-            <label>OBSERVACIONES</label><textarea id="observacionesS" rows="2"></textarea>
-            <button type="submit" id="btnEnviarS" class="btn-accion">GUARDAR TAREA</button>
-            <div class="loader" id="loaderS">GUARDANDO... ⏳</div>
-        </form>
-    </div>
+        </div>
+
+        </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item activa" onclick="cambiarPestana('reporte')"><span class="icon">📝</span><span>Reporte</span></div>
+        <div class="nav-item" onclick="cambiarPestana('agenda')"><span class="icon">📅</span><span>Agenda</span></div>
+        <div class="nav-item" onclick="cambiarPestana('dispositivos')"><span class="icon">🔬</span><span>Laborat.</span></div>
+        </div>
 </div>
 
 <script>
     // ==========================================
-    // 🔐 GESTIÓN DE USUARIOS Y CONTRASEÑAS
+    // 🔐 DATOS DE CONFIGURACIÓN
     // ==========================================
-    const USUARIOS = {
-        "JUAN CAMILO COY": "2905",
-        "ANDRES FELIPE HENAO": "9666",
-        "CAMILO HERRERA": "1053",
-        "JUAN FELIPE LOPEZ": "5370",
-        "FELIPE DE LOS RIOS": "1397",
-        "FRANCISCO SANCHEZ": "1803",
-        "ISDECOM": "5593"
-    };
-
+    const USUARIOS = { "JUAN CAMILO COY": "2905", "ANDRES FELIPE HENAO": "9666", "CAMILO HERRERA": "1053", "JUAN FELIPE LOPEZ": "5370", "FELIPE DE LOS RIOS": "1397", "FRANCISCO SANCHEZ": "1803", "ISDECOM": "5593" };
+    
     // 🔗 PEGA AQUÍ TU ENLACE DE APPS SCRIPT DE LA APP PRINCIPAL
     const apiURL = "https://script.google.com/macros/s/AKfycbySWEZLtq99Vw3G3DRtnAzfkiVlKFMUYcuJzqeMNbTA5jbCZ7Oc_cxk-PG9A6PTuBthNA/exec";
 
-    function cambiarPestana(seccion) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('activa'));
-        document.querySelectorAll('.seccion-formulario').forEach(s => s.classList.remove('activa'));
-        const secciones = ['reporte', 'agenda', 'dispositivos', 'copy', 'electronicos', 'semaforo'];
-        document.querySelectorAll('.tab')[secciones.indexOf(seccion)].classList.add('activa');
-        document.getElementById('seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1)).classList.add('activa');
+    // ==========================================
+    // 🔔 FUNCIONES DE UI MODERNA (TOAST & LOADER)
+    // ==========================================
+    function showToast(message, isError = false) {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
+        toast.classList.add("show");
+        setTimeout(() => { toast.classList.remove("show"); }, 3500);
     }
 
+    function showLoader(show) {
+        document.getElementById("loaderOverlay").style.display = show ? "flex" : "none";
+    }
+
+    function cambiarPestana(seccion) {
+        document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('activa'));
+        document.querySelectorAll('.seccion-formulario').forEach(s => s.classList.remove('activa'));
+        
+        // Activa el icono inferior
+        event.currentTarget.classList.add('activa');
+        
+        // Muestra la tarjeta correcta
+        let seccionId = 'seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1);
+        if(document.getElementById(seccionId)) {
+            document.getElementById(seccionId).classList.add('activa');
+            window.scrollTo(0,0);
+        }
+    }
+
+    // ==========================================
+    // 🔐 LÓGICA DE SESIÓN
+    // ==========================================
     let tInactividad; const T_LIMITE = 3 * 60 * 1000;
     
-    function cerrar() { 
-        localStorage.removeItem("isdecom"); 
-        localStorage.removeItem("isdecomUser");
-        document.getElementById("appScreen").style.display = "none"; 
-        document.getElementById("loginScreen").style.display = "block"; 
-        document.getElementById("pinInput").value = ""; 
-        document.getElementById("userInput").value = ""; 
-        window.scrollTo(0,0); 
-    }
-    
+    function cerrar() { localStorage.removeItem("isdecom"); localStorage.removeItem("isdecomUser"); document.getElementById("appScreen").style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; document.getElementById("pinInput").value = ""; document.getElementById("userInput").value = ""; window.scrollTo(0,0); }
     function reiniciarT() { clearTimeout(tInactividad); if(localStorage.getItem("isdecom")==="ok") tInactividad = setTimeout(cerrar, T_LIMITE); }
     window.onload=reiniciarT; document.onmousemove=reiniciarT; document.onkeypress=reiniciarT; document.ontouchstart=reiniciarT; document.onclick=reiniciarT;
     
     document.addEventListener("DOMContentLoaded", () => { if(localStorage.getItem("isdecom")==="ok") iniciarApp(); });
     
-    // Validar Login y guardar el Usuario para la Auto-Identificación
     document.getElementById("btnDesbloquear").addEventListener("click", () => { 
-        let user = document.getElementById("userInput").value;
-        let pass = document.getElementById("pinInput").value;
-        
+        let user = document.getElementById("userInput").value; let pass = document.getElementById("pinInput").value;
         if(user && USUARIOS[user] && USUARIOS[user] === pass) { 
-            localStorage.setItem("isdecom","ok"); 
-            localStorage.setItem("isdecomUser", user); // Guardamos quién es el técnico
-            iniciarApp(); 
-        } else { 
-            document.getElementById("errorPin").style.display="block"; 
-            document.getElementById("pinInput").value=""; 
-        }
+            localStorage.setItem("isdecom","ok"); localStorage.setItem("isdecomUser", user); iniciarApp(); 
+        } else { document.getElementById("errorPin").style.display="block"; document.getElementById("pinInput").value=""; }
     });
     
     document.getElementById("btnSalir").addEventListener("click", cerrar);
 
     function iniciarApp() { 
-        document.getElementById("loginScreen").style.display="none"; 
-        document.getElementById("appScreen").style.display="block"; 
-        document.getElementById("errorPin").style.display="none"; 
-        
-        // Mostrar el nombre del técnico en la cabecera
+        document.getElementById("loginScreen").style.display="none"; document.getElementById("appScreen").style.display="block"; document.getElementById("errorPin").style.display="none"; 
         let usuarioActual = localStorage.getItem("isdecomUser") || "DESCONOCIDO";
-        document.getElementById("displayUsuario").innerText = "👤 TÉCNICO: " + usuarioActual;
-        
-        cargarClientes(); 
-        reiniciarT(); 
+        document.getElementById("displayUsuario").innerHTML = `👤 <span>${usuarioActual.split(" ")[0]}</span>`; // Muestra solo el primer nombre
+        cargarClientes(); reiniciarT(); 
     }
 
     function cargarClientes() {
@@ -288,6 +276,9 @@
         } else i.forEach(inp => inp.placeholder = "⚠️ MANUAL...");
     }
 
+    // ==========================================
+    // 📸 PROCESAMIENTO DE ARCHIVOS Y ENVÍO
+    // ==========================================
     function procesarArchivo(file) {
         return new Promise((res) => {
             const r = new FileReader(); r.readAsDataURL(file);
@@ -300,9 +291,7 @@
                         const c = document.createElement('canvas'); c.width = w; c.height = h; c.getContext('2d').drawImage(img,0,0,w,h);
                         res({ base64: c.toDataURL('image/jpeg', 0.7), name: file.name, mimeType: 'image/jpeg' });
                     }
-                } else {
-                    res({ base64: e.target.result, name: file.name, mimeType: file.type });
-                }
+                } else { res({ base64: e.target.result, name: file.name, mimeType: file.type }); }
             };
         });
     }
@@ -313,7 +302,7 @@
         if(f.length>0){ 
             let p=[]; 
             for(let i=0; i<f.length; i++) {
-                if(f[i].type.startsWith('video/') && f[i].size > 15728640) { alert("⚠️ EL VIDEO '" + f[i].name + "' PESA MÁS DE 15MB. ELIMÍNALO Y GRABA UNO MÁS CORTO."); continue; }
+                if(f[i].type.startsWith('video/') && f[i].size > 15728640) { showToast("⚠️ EL VIDEO '" + f[i].name + "' PESA MÁS DE 15MB.", true); continue; }
                 p.push(procesarArchivo(f[i])); 
             }
             arr = await Promise.all(p); 
@@ -321,58 +310,28 @@
         return arr;
     }
 
-    document.getElementById('formReporte').addEventListener('submit', async (e) => { e.preventDefault(); mostrarC('R',true); enviar("reporte", await procArchivos('fotoUploadR')); });
-    document.getElementById('formDispositivos').addEventListener('submit', async (e) => { e.preventDefault(); mostrarC('D',true); enviar("dispositivos", await procArchivos('fotoUploadD')); });
-    document.getElementById('formCopy').addEventListener('submit', async (e) => { e.preventDefault(); mostrarC('C',true); enviar("copy", await procArchivos('fotoUploadC')); });
-    
-    ['Agenda','Electronicos','Semaforo'].forEach(m => document.getElementById('form'+m).addEventListener('submit', (e) => { e.preventDefault(); mostrarC(m.charAt(0),true); enviar(m.toLowerCase(), []); }));
+    document.getElementById('formReporte').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("reporte", await procArchivos('fotoUploadR'), 'formReporte'); });
+    document.getElementById('formDispositivos').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("dispositivos", await procArchivos('fotoUploadD'), 'formDispositivos'); });
+    document.getElementById('formAgenda').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("agenda", [], 'formAgenda'); });
 
-    function mostrarC(t, e) { document.getElementById('loader'+t).style.display = e?'block':'none'; document.getElementById('btnEnviar'+t).style.display = e?'none':'block'; }
-
-    function enviar(tipo, arr) {
-        // ✅ AUTO-IDENTIFICACIÓN: Capturamos al técnico logueado sin preguntarle
+    function enviar(tipo, arr, formId) {
         let usuarioActual = localStorage.getItem("isdecomUser") || "DESCONOCIDO";
         let d = { tipoFormulario: tipo, fotos: arr };
         
-        if (tipo==="reporte") { 
-            d = {...d, tipoVisita: v('tipoVisitaR'), fecha: v('fechaR'), horaInicio: v('horaInicioR'), horaFinal: v('horaFinalR'), cliente: v('clienteR'), sede: v('sedeR'), servicio: v('servicioR'), materiales: v('materialesR'), estado: v('estadoR'), tecnico: usuarioActual}; 
-        }
-        else if (tipo==="agenda") { 
-            let agendarCal = document.getElementById('syncCalendarA').checked;
-            d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), horaServicio: v('horaA'), cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: "PENDIENTE", observaciones: v('observacionesA')}; 
-        }
-        else if (tipo==="dispositivos") { 
-            d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: "PENDIENTE", observaciones: v('observacionesD')}; 
-        }
-        else if (tipo==="copy") { 
-            d = {...d, fecha: v('fechaC'), cliente: v('clienteC'), actividad: v('actividadC'), tecnicoDeja: v('tecnicoDejaC'), estado: "PENDIENTE", observaciones: v('observacionesC')}; 
-        }
-        else if (tipo==="electronicos") { 
-            d = {...d, fecha: v('fechaE'), cliente: v('clienteE'), electronico: v('electronicoE'), actividad: v('actividadE'), estado: "PENDIENTE", observaciones: v('observacionesE')}; 
-        }
-        else if (tipo==="semaforo") { 
-            d = {...d, fecha: v('fechaS'), cliente: v('clienteS'), actividad: v('actividadS'), asignadoPor: v('asignadoPorS'), revisadoPor: v('revisadoPorS'), estado: "PENDIENTE", tipoCliente: v('tipoClienteS'), observaciones: v('observacionesS')}; 
-        }
+        if (tipo==="reporte") { d = {...d, tipoVisita: v('tipoVisitaR'), fecha: v('fechaR'), horaInicio: v('horaInicioR'), horaFinal: v('horaFinalR'), cliente: v('clienteR'), sede: v('sedeR'), servicio: v('servicioR'), materiales: v('materialesR'), estado: v('estadoR'), tecnico: usuarioActual}; }
+        else if (tipo==="agenda") { let agendarCal = document.getElementById('syncCalendarA').checked; d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), horaServicio: v('horaA'), cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: "PENDIENTE", observaciones: v('observacionesA')}; }
+        else if (tipo==="dispositivos") { d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: "PENDIENTE", observaciones: v('observacionesD')}; }
 
         fetch(apiURL, { method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(d) })
         .then(r => r.json()).then(res => {
-            
             if (tipo === 'reporte') {
-                const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n" +
-                                  "👷‍♂️ *Técnico:* " + usuarioActual + "\n" +
-                                  "🏢 *Cliente:* " + v('clienteR') + "\n" +
-                                  "⏱️ *Horario:* " + v('horaInicioR') + " a " + v('horaFinalR') + "\n\n" +
-                                  "📝 *Descripción del Servicio:*\n" + v('servicioR') + "\n\n" +
-                                  "🛠️ *Materiales Usados:*\n" + v('materialesR');
-                
-                const urlWa = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensajeWa);
-                window.open(urlWa, '_blank');
+                const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n👷‍♂️ *Técnico:* " + usuarioActual + "\n🏢 *Cliente:* " + v('clienteR') + "\n⏱️ *Horario:* " + v('horaInicioR') + " a " + v('horaFinalR') + "\n\n📝 *Descripción del Servicio:*\n" + v('servicioR');
+                window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(mensajeWa), '_blank');
             }
-
-            if (tipo==='dispositivos') alert("✅ TICKET: " + res.idGenerado); else alert("✅ GUARDADO EN DRIVE Y EXCEL.");
-            document.getElementById('form'+tipo.charAt(0).toUpperCase()+tipo.slice(1)).reset(); mostrarC(tipo.charAt(0).toUpperCase(), false);
-            window.scrollTo(0, 0); cargarClientes();
-        }).catch(() => { alert("❌ ERROR AL GUARDAR."); mostrarC(tipo.charAt(0).toUpperCase(), false); });
+            showLoader(false);
+            if (tipo==='dispositivos') showToast("✅ TICKET CREADO: " + res.idGenerado); else showToast("✅ DATOS GUARDADOS CON ÉXITO.");
+            document.getElementById(formId).reset(); window.scrollTo(0, 0); cargarClientes();
+        }).catch(() => { showLoader(false); showToast("❌ ERROR AL CONECTAR AL SERVIDOR.", true); });
     }
     function v(id) { return document.getElementById(id) ? document.getElementById(id).value : ""; }
 </script>
