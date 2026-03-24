@@ -3,166 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventario - ISDECOM</title>
-    <meta name="theme-color" content="#008fcc">
+    <title>Inventario Admin - ISDECOM</title>
+    <meta name="theme-color" content="#0f172a">
     <style>
-        :root { --azul-principal: #008fcc; --azul-oscuro: #008cc7; --gris-texto: #313231; --fondo-app: #f4f7f6; --verde: #137333; --rojo: #c53929; }
-        body, input, select, button, .tab, table { font-family: 'Calibri', sans-serif; font-size: 13px; text-transform: uppercase; }
-        body { background-color: var(--fondo-app); margin: 0; padding: 10px; color: var(--gris-texto); }
-        .form-container { background: white; max-width: 600px; margin: 10px auto; padding: 20px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); position: relative; }
-        .header-container { text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid #f0f0f0; position: relative; }
-        .logo-isdecom { max-width: 150px; height: auto; margin-bottom: 5px; }
-        h2 { color: var(--azul-principal); margin: 0 0 5px 0; font-size: 15px; text-align: center;}
+        :root {
+            --primary: #2563eb; /* Azul Rey Moderno */
+            --primary-dark: #1e40af;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+        body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; text-transform: uppercase; font-size: 13px; }
         
-        /* 🔐 Estilos del Login */
-        #loginScreen { text-align: center; margin-top: 40px; }
-        .pin-input { text-align: center; font-size: 20px; letter-spacing: 10px; font-weight: bold; color: var(--azul-principal); }
-        #btnSalir { position: absolute; top: 0; right: 0; background: #fce8e6; color: #c53929; border: none; padding: 6px 12px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        /* 🔵 BARRA SUPERIOR (NAVBAR) */
+        .navbar { background-color: #0f172a; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .navbar img { height: 35px; filter: brightness(0) invert(1); /* Pone el logo blanco */ }
+        .navbar h1 { margin: 0; font-size: 15px; letter-spacing: 1px; color: #cbd5e1; display: flex; align-items: center; gap: 8px;}
+        .btn-logout { background: #334155; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 12px; transition: 0.2s;}
+        .btn-logout:hover { background: #475569; }
         
-        .tabs { display: flex; gap: 5px; margin-bottom: 20px; background-color: white; }
-        .tab { flex: 1; text-align: center; padding: 10px 5px; font-weight: bold; cursor: pointer; color: var(--gris-texto); background-color: #f0f0f0; border-radius: 6px; font-size: 12px;}
-        .tab.activa { background-color: var(--azul-principal); color: white; }
-        .seccion-formulario { display: none; } .seccion-formulario.activa { display: block; }
+        /* 📦 CONTENEDOR PRINCIPAL */
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
         
-        label { font-weight: bold; display: block; margin-top: 15px; color: var(--azul-oscuro); }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #d1d5db; border-radius: 8px; box-sizing: border-box; font-weight: bold;}
-        input:focus, select:focus { border-color: var(--azul-principal); outline: none; }
-        .dos-columnas { display: flex; gap: 10px; } .columna { flex: 1; }
-        button.btn-accion { width: 100%; background-color: var(--azul-principal); color: white; padding: 12px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        /* 🗂️ PESTAÑAS MODERNAS */
+        .nav-tabs { display: flex; background: var(--card-bg); border-radius: 10px; padding: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; border: 1px solid var(--border-color);}
+        .nav-tab { flex: 1; text-align: center; padding: 12px; font-weight: bold; color: var(--text-muted); cursor: pointer; border-radius: 8px; transition: 0.3s; font-size: 12px; }
+        .nav-tab.activa { background-color: var(--primary); color: white; box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3); }
         
-        .tipo-operacion { display: flex; gap: 10px; margin-top: 10px; }
-        .radio-btn { flex: 1; text-align: center; }
-        .radio-btn input[type="radio"] { display: none; }
-        .radio-btn label { display: block; padding: 10px; border-radius: 8px; border: 2px solid #ddd; cursor: pointer; font-weight: bold; margin-top: 0; color: #555;}
-        .radio-btn input[type="radio"]:checked + label.ingreso { background-color: #e6f4ea; border-color: var(--verde); color: var(--verde); }
-        .radio-btn input[type="radio"]:checked + label.retiro { background-color: #fce8e6; border-color: var(--rojo); color: var(--rojo); }
+        /* 🃏 TARJETAS DE CONTENIDO */
+        .card { background: var(--card-bg); border-radius: 12px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: none; border: 1px solid var(--border-color); }
+        .card.activa { display: block; }
+        .card h2 { margin-top: 0; color: #0f172a; font-size: 16px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        
+        /* 📝 FORMULARIOS */
+        label { font-size: 11px; font-weight: 800; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 15px; display: block; }
+        input, select { width: 100%; padding: 12px; margin-top: 6px; border: 1px solid var(--border-color); border-radius: 8px; background-color: #f8fafc; transition: 0.3s; font-weight: 600; color: var(--text-main); box-sizing: border-box; }
+        input:focus, select:focus { border-color: var(--primary); background-color: #fff; outline: none; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* 🔘 BOTONES */
+        .btn-primary { width: 100%; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 14px; border: none; border-radius: 8px; font-weight: bold; font-size: 14px; margin-top: 25px; cursor: pointer; box-shadow: 0 4px 6px rgba(37,99,235,0.2); transition: 0.2s; }
+        .btn-primary:active { transform: translateY(2px); }
+        .btn-secundario { background-color: #f1f5f9; color: var(--primary-dark); border: 1px solid #cbd5e1; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 15px; transition: 0.2s;}
+        .btn-secundario:hover { background-color: #e2e8f0; }
 
-        .tabla-contenedor { overflow-x: auto; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd; }
-        table { width: 100%; border-collapse: collapse; min-width: 400px; }
-        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: var(--azul-principal); color: white; position: sticky; top: 0; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .cantidad-badge { font-weight: bold; padding: 4px 8px; border-radius: 4px; background: #e0e0e0; }
-        .badge-verde { background: #e6f4ea; color: var(--verde); }
-        .badge-rojo { background: #fce8e6; color: var(--rojo); }
+        /* 🔘 SELECTOR DE OPERACIÓN (INGRESO/RETIRO) */
+        .op-container { display: flex; gap: 15px; margin-top: 8px; }
+        .op-box { flex: 1; }
+        .op-box input { display: none; }
+        .op-box label { margin: 0; display: block; text-align: center; padding: 12px; border: 2px solid var(--border-color); border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: bold; transition: 0.2s; background: #f8fafc; color: var(--text-muted);}
+        .op-box input:checked + label.lbl-ingreso { border-color: var(--success); background-color: #ecfdf5; color: #065f46; }
+        .op-box input:checked + label.lbl-retiro { border-color: var(--danger); background-color: #fef2f2; color: #991b1b; }
         
-        .loader { display: none; text-align: center; margin-top: 15px; color: var(--azul-principal); font-weight: bold; }
-        button.btn-secundario { background-color: #453e43; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; width: 100%;}
+        /* 📊 TABLAS DE DATOS */
+        .table-responsive { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 10px;}
+        table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 400px; background: white;}
+        th { background-color: #f8fafc; color: var(--text-muted); padding: 12px; text-align: left; font-weight: 800; border-bottom: 2px solid var(--border-color); white-space: nowrap;}
+        td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        tr:hover td { background-color: #f1f5f9; }
+        
+        /* 🏷️ ETIQUETAS REDONDEADAS (BADGES) */
+        .badge { padding: 5px 10px; border-radius: 20px; font-weight: 800; font-size: 12px; display: inline-block; text-align: center; min-width: 25px;}
+        .bg-green { background-color: #d1fae5; color: #065f46; }
+        .bg-red { background-color: #fee2e2; color: #991b1b; }
+        .bg-gray { background-color: #e2e8f0; color: #475569; }
+
+        /* 🔐 PANTALLA LOGIN */
+        .login-wrapper { max-width: 400px; margin: 60px auto; padding: 0 15px; }
+        .login-card { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid var(--border-color); }
+        .login-card img { max-width: 150px; margin-bottom: 15px; }
+        .login-card .pin-input { font-size: 24px; letter-spacing: 12px; text-align: center; padding: 15px; margin-top: 10px; background: #f8fafc;}
+        .loader { display: none; text-align: center; margin-top: 15px; color: var(--primary); font-weight: bold; font-size: 12px;}
     </style>
 </head>
 <body>
 
 <datalist id="listaHerramientas"></datalist>
 
-<div class="form-container" id="loginScreen">
-    <div class="header-container">
-        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom" alt="ISDECOM">
-        <h2>ACCESO AL INVENTARIO</h2>
+<div class="login-wrapper" id="loginScreen">
+    <div class="login-card">
+        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
+        <h2 style="color: #0f172a; margin-bottom: 20px;">PORTAL DE INVENTARIO</h2>
+        
+        <label style="text-align: left;">SELECCIONE SU USUARIO:</label>
+        <select id="userInput" style="text-align: center; font-size: 14px;">
+            <option value="" disabled selected>-- SELECCIONE --</option>
+            <option value="JUAN CAMILO COY">JUAN CAMILO COY</option>
+            <option value="ANDRES FELIPE HENAO">ANDRES FELIPE HENAO</option>
+            <option value="CAMILO HERRERA">CAMILO HERRERA</option>
+            <option value="JUAN FELIPE LOPEZ">JUAN FELIPE LOPEZ</option>
+            <option value="FELIPE DE LOS RIOS">FELIPE DE LOS RIOS</option>
+            <option value="FRANCISCO SANCHEZ">FRANCISCO SANCHEZ</option>
+            <option value="ISDECOM">ISDECOM</option>
+        </select>
+        
+        <label style="text-align: left;">CONTRASEÑA:</label>
+        <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off">
+        
+        <p id="errorPin" style="color: #ef4444; display: none; font-weight: bold; margin-top: 10px;">❌ CONTRASEÑA INCORRECTA</p>
+        <button id="btnDesbloquear" class="btn-primary" style="margin-top: 20px;">🔒 INGRESAR</button>
     </div>
-    
-    <label>SELECCIONE SU USUARIO:</label>
-    <select id="userInput" style="text-align: center; font-size: 14px; font-weight: bold;">
-        <option value="" disabled selected>-- SELECCIONE --</option>
-        <option value="JUAN CAMILO COY">JUAN CAMILO COY</option>
-        <option value="ANDRES FELIPE HENAO">ANDRES FELIPE HENAO</option>
-        <option value="CAMILO HERRERA">CAMILO HERRERA</option>
-        <option value="JUAN FELIPE LOPEZ">JUAN FELIPE LOPEZ</option>
-        <option value="FELIPE DE LOS RIOS">FELIPE DE LOS RIOS</option>
-        <option value="FRANCISCO SANCHEZ">FRANCISCO SANCHEZ</option>
-        <option value="ISDECOM">ISDECOM</option>
-    </select>
-    
-    <label>CONTRASEÑA:</label>
-    <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off">
-    
-    <p id="errorPin" style="color: #e11d48; display: none; font-weight: bold; margin-top: 10px; text-align: center;">❌ CONTRASEÑA INCORRECTA</p>
-    <button id="btnDesbloquear" class="btn-accion">🔒 INGRESAR</button>
 </div>
 
-<div class="form-container" id="appScreen" style="display: none;">
-    <div class="header-container">
-        <button id="btnSalir">🔒 SALIR</button>
-        <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" class="logo-isdecom" alt="ISDECOM">
-        <h2>SISTEMA DE INVENTARIO</h2>
-    </div>
-
-    <div class="tabs">
-        <div class="tab activa" onclick="cambiarPestana('consulta')">📊 STOCK</div>
-        <div class="tab" onclick="cambiarPestana('herramientas')">🔧 HERRAMIENTAS</div>
-        <div class="tab" onclick="cambiarPestana('accesorios')">🔌 ACCESORIOS</div>
-    </div>
+<div id="appScreen" style="display: none;">
     
-    <div id="seccionConsulta" class="seccion-formulario activa">
-        <button class="btn-secundario" onclick="cargarInventario()">🔄 ACTUALIZAR STOCK</button>
-        <div class="loader" id="loaderConsulta" style="display: block;">⏳ CARGANDO INVENTARIO...</div>
-        
-        <div id="contenidoInventario" style="display: none;">
-            <h3 style="color: var(--azul-oscuro); border-bottom: 2px solid #ddd; padding-bottom: 5px;">🔧 HERRAMIENTAS</h3>
-            <div class="tabla-contenedor">
-                <table id="tablaHerramientas">
-                    <thead><tr><th>CANT</th><th>HERRAMIENTA</th></tr></thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+    <div class="navbar">
+        <h1><img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM"> INVENTARIO</h1>
+        <button id="btnSalir" class="btn-logout">CERRAR SESIÓN</button>
+    </div>
 
-            <h3 style="color: var(--azul-oscuro); border-bottom: 2px solid #ddd; padding-bottom: 5px; margin-top: 25px;">🔌 ACCESORIOS</h3>
-            <div class="tabla-contenedor">
-                <table id="tablaAccesorios">
-                    <thead><tr><th>CANT</th><th>MARCA/MODELO</th><th>SERIAL</th><th>P. VENTA</th></tr></thead>
-                    <tbody></tbody>
-                </table>
+    <div class="container">
+        <div class="nav-tabs">
+            <div class="nav-tab activa" onclick="cambiarPestana('consulta')">📊 STOCK</div>
+            <div class="nav-tab" onclick="cambiarPestana('herramientas')">🔧 HERRAM.</div>
+            <div class="nav-tab" onclick="cambiarPestana('accesorios')">🔌 ACCES.</div>
+        </div>
+        
+        <div id="seccionConsulta" class="card activa">
+            <h2>📊 VISOR DE INVENTARIO</h2>
+            <button class="btn-secundario" onclick="cargarInventario()">🔄 ACTUALIZAR DATOS</button>
+            <div class="loader" id="loaderConsulta" style="display: block;">⏳ SINCRONIZANDO CON LA BASE DE DATOS...</div>
+            
+            <div id="contenidoInventario" style="display: none;">
+                <h3 style="color: var(--text-muted); font-size: 12px; margin-top: 20px;">🔧 HERRAMIENTAS ACTIVAS</h3>
+                <div class="table-responsive">
+                    <table id="tablaHerramientas">
+                        <thead><tr><th>STOCK</th><th>DESCRIPCIÓN</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <h3 style="color: var(--text-muted); font-size: 12px; margin-top: 30px;">🔌 ACCESORIOS Y COMPONENTES</h3>
+                <div class="table-responsive">
+                    <table id="tablaAccesorios">
+                        <thead><tr><th>STOCK</th><th>MARCA / MODELO</th><th>SERIAL</th><th>P. VENTA</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div id="seccionHerramientas" class="seccion-formulario">
-        <h2>GESTIÓN DE HERRAMIENTAS</h2>
-        <form id="formHerramientas">
-            <label>TIPO DE OPERACIÓN *</label>
-            <div class="tipo-operacion">
-                <div class="radio-btn"><input type="radio" id="ingresoH" name="operacionH" value="ingreso" checked><label for="ingresoH" class="ingreso">🟢 INGRESO</label></div>
-                <div class="radio-btn"><input type="radio" id="retiroH" name="operacionH" value="retiro"><label for="retiroH" class="retiro">🔴 RETIRO</label></div>
-            </div>
+        <div id="seccionHerramientas" class="card">
+            <h2>🔧 GESTIÓN DE HERRAMIENTAS</h2>
+            <form id="formHerramientas">
+                <label>TIPO DE MOVIMIENTO *</label>
+                <div class="op-container">
+                    <div class="op-box"><input type="radio" id="ingresoH" name="operacionH" value="ingreso" checked><label for="ingresoH" class="lbl-ingreso">🟢 ENTRADA</label></div>
+                    <div class="op-box"><input type="radio" id="retiroH" name="operacionH" value="retiro"><label for="retiroH" class="lbl-retiro">🔴 SALIDA</label></div>
+                </div>
 
-            <label>NOMBRE DE LA HERRAMIENTA *</label>
-            <input type="text" list="listaHerramientas" id="nombreH" placeholder="Seleccione o escriba una nueva..." required>
-            
-            <label>CANTIDAD *</label>
-            <input type="number" id="cantidadH" min="1" placeholder="Ej: 2" required>
-            
-            <button type="submit" id="btnEnviarH" class="btn-accion">💾 PROCESAR HERRAMIENTA</button>
-            <div class="loader" id="loaderH">GUARDANDO EN LA BASE DE DATOS... ⏳</div>
-        </form>
-    </div>
+                <label>NOMBRE DE LA HERRAMIENTA *</label>
+                <input type="text" list="listaHerramientas" id="nombreH" placeholder="Seleccione o escriba una nueva..." required>
+                
+                <label>CANTIDAD *</label>
+                <input type="number" id="cantidadH" min="1" placeholder="Ej: 2" required>
+                
+                <button type="submit" id="btnEnviarH" class="btn-primary">💾 REGISTRAR MOVIMIENTO</button>
+                <div class="loader" id="loaderH">PROCESANDO TRANSACCIÓN... ⏳</div>
+            </form>
+        </div>
 
-    <div id="seccionAccesorios" class="seccion-formulario">
-        <h2>GESTIÓN DE ACCESORIOS</h2>
-        <form id="formAccesorios">
-            <label>TIPO DE OPERACIÓN *</label>
-            <div class="tipo-operacion">
-                <div class="radio-btn"><input type="radio" id="ingresoA" name="operacionA" value="ingreso" checked><label for="ingresoA" class="ingreso">🟢 INGRESO</label></div>
-                <div class="radio-btn"><input type="radio" id="retiroA" name="operacionA" value="retiro"><label for="retiroA" class="retiro">🔴 RETIRO</label></div>
-            </div>
+        <div id="seccionAccesorios" class="card">
+            <h2>🔌 GESTIÓN DE ACCESORIOS</h2>
+            <form id="formAccesorios">
+                <label>TIPO DE MOVIMIENTO *</label>
+                <div class="op-container">
+                    <div class="op-box"><input type="radio" id="ingresoA" name="operacionA" value="ingreso" checked><label for="ingresoA" class="lbl-ingreso">🟢 ENTRADA</label></div>
+                    <div class="op-box"><input type="radio" id="retiroA" name="operacionA" value="retiro"><label for="retiroA" class="lbl-retiro">🔴 SALIDA</label></div>
+                </div>
 
-            <div class="dos-columnas">
-                <div class="columna"><label>MARCA *</label><input type="text" id="marcaA" placeholder="Ej: HP" required></div>
-                <div class="columna"><label>MODELO *</label><input type="text" id="modeloA" placeholder="Ej: 14-CF" required></div>
-            </div>
+                <div class="grid-2">
+                    <div><label>MARCA *</label><input type="text" id="marcaA" placeholder="Ej: HP" required></div>
+                    <div><label>MODELO *</label><input type="text" id="modeloA" placeholder="Ej: 14-CF" required></div>
+                </div>
 
-            <label>NÚMERO DE SERIAL *</label>
-            <input type="text" id="serialA" placeholder="Ej: CND1234567" required>
-            
-            <label>CANTIDAD *</label>
-            <input type="number" id="cantidadA" min="1" placeholder="Ej: 5" required>
-            
-            <div class="dos-columnas">
-                <div class="columna"><label>PRECIO COMPRA ($)</label><input type="number" id="pCompraA" placeholder="Ej: 150000" required></div>
-                <div class="columna"><label>PRECIO VENTA ($)</label><input type="number" id="pVentaA" placeholder="Ej: 250000" required></div>
-            </div>
+                <label>NÚMERO DE SERIAL *</label>
+                <input type="text" id="serialA" placeholder="Ej: CND1234567" required>
+                
+                <label>CANTIDAD *</label>
+                <input type="number" id="cantidadA" min="1" placeholder="Ej: 5" required>
+                
+                <div class="grid-2">
+                    <div><label>PRECIO COMPRA ($)</label><input type="number" id="pCompraA" placeholder="Ej: 150000" required></div>
+                    <div><label>PRECIO VENTA ($)</label><input type="number" id="pVentaA" placeholder="Ej: 250000" required></div>
+                </div>
 
-            <button type="submit" id="btnEnviarA" class="btn-accion">💾 PROCESAR ACCESORIO</button>
-            <div class="loader" id="loaderA">GUARDANDO EN LA BASE DE DATOS... ⏳</div>
-        </form>
+                <button type="submit" id="btnEnviarA" class="btn-primary">💾 REGISTRAR MOVIMIENTO</button>
+                <div class="loader" id="loaderA">PROCESANDO TRANSACCIÓN... ⏳</div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -207,11 +240,11 @@
     }
 
     function cambiarPestana(seccion) {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('activa')); document.querySelectorAll('.seccion-formulario').forEach(s => s.classList.remove('activa'));
-        const tabsMap = { 'consulta': 0, 'herramientas': 1, 'accesorios': 2 }; document.querySelectorAll('.tab')[tabsMap[seccion]].classList.add('activa'); document.getElementById('seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1)).classList.add('activa');
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('activa')); document.querySelectorAll('.card').forEach(s => s.classList.remove('activa'));
+        const tabsMap = { 'consulta': 0, 'herramientas': 1, 'accesorios': 2 }; document.querySelectorAll('.nav-tab')[tabsMap[seccion]].classList.add('activa'); document.getElementById('seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1)).classList.add('activa');
     }
 
-    // ✅ TÉCNICA ANTIBLOQUEO (JSONP) PARA EL FRONTEND
+    // ✅ TÉCNICA ANTIBLOQUEO (JSONP)
     function cargarInventario() {
         if(apiURL === "PEGAR_AQUI_TU_NUEVO_ENLACE_DE_APPS_SCRIPT") { return; }
         document.getElementById("loaderConsulta").style.display = "block"; document.getElementById("contenidoInventario").style.display = "none";
@@ -236,13 +269,16 @@
 
     function renderTabla(idTabla, filas, tipo) {
         const tbody = document.querySelector(`#${idTabla} tbody`); tbody.innerHTML = ""; 
-        if (!filas || filas.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No hay registros.</td></tr>`; return; }
+        if (!filas || filas.length === 0) { tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#64748b;">No hay registros disponibles.</td></tr>`; return; }
 
         filas.forEach(fila => {
-            let cantidad = parseInt(fila[0]); let claseBadge = cantidad > 0 ? "badge-verde" : (cantidad < 0 ? "badge-rojo" : ""); let badge = `<span class="cantidad-badge ${claseBadge}">${cantidad}</span>`;
+            let cantidad = parseInt(fila[0]); 
+            let claseBadge = cantidad > 0 ? "bg-green" : (cantidad < 0 ? "bg-red" : "bg-gray"); 
+            let badge = `<span class="badge ${claseBadge}">${cantidad}</span>`;
+            
             let tr = document.createElement("tr");
-            if (tipo === "herramientas") { tr.innerHTML = `<td>${badge}</td><td>${fila[1]}</td>`; } 
-            else { let pVentaFormat = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(fila[5] || 0); tr.innerHTML = `<td>${badge}</td><td><b>${fila[1]}</b><br>${fila[2]}</td><td>${fila[3]}</td><td>${pVentaFormat}</td>`; }
+            if (tipo === "herramientas") { tr.innerHTML = `<td>${badge}</td><td style="font-weight:600; color:#334155;">${fila[1]}</td>`; } 
+            else { let pVentaFormat = new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(fila[5] || 0); tr.innerHTML = `<td>${badge}</td><td><b style="color:#0f172a;">${fila[1]}</b><br><span style="color:#64748b;">${fila[2]}</span></td><td style="font-family:monospace; color:#475569;">${fila[3]}</td><td style="font-weight:bold; color:#10b981;">${pVentaFormat}</td>`; }
             tbody.appendChild(tr);
         });
     }
@@ -252,7 +288,7 @@
         
         fetch(apiURL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(payload) })
         .then(r => r.json()).then(res => {
-            alert(`✅ INVENTARIO ACTUALIZADO CON ÉXITO.`);
+            alert(`✅ MOVIMIENTO REGISTRADO CON ÉXITO.`);
             document.getElementById(idFormulario).reset(); document.getElementById(`loader${letraId}`).style.display = 'none'; document.getElementById(`btnEnviar${letraId}`).style.display = 'block';
             cambiarPestana('consulta'); cargarInventario();
         }).catch(err => { alert("❌ ERROR AL CONECTAR CON EL SERVIDOR."); document.getElementById(`loader${letraId}`).style.display = 'none'; document.getElementById(`btnEnviar${letraId}`).style.display = 'block'; });
@@ -268,3 +304,5 @@
         procesarFormulario("accesorios", { tipo: "accesorios", marca: document.getElementById("marcaA").value, modelo: document.getElementById("modeloA").value, serial: document.getElementById("serialA").value, cantidad: cantidadIngresada, precioCompra: document.getElementById("pCompraA").value, precioVenta: document.getElementById("pVentaA").value }, "formAccesorios", "A");
     });
 </script>
+</body>
+</html>
