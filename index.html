@@ -9,7 +9,7 @@
     <style>
         /* 🎨 VARIABLES CORPORATIVAS (Alta Gama) */
         :root {
-            --primary: #0056b3; /* Azul Corporativo ISDECOM */
+            --primary: #0056b3; 
             --primary-light: #e6f0fa;
             --secondary: #f8fafc;
             --text-dark: #1e293b;
@@ -20,7 +20,7 @@
             --bg-color: #f1f5f9;
         }
 
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; padding-bottom: 80px; /* Espacio para el Bottom Nav */ text-transform: uppercase; font-size: 13px; }
+        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; padding-bottom: 80px; text-transform: uppercase; font-size: 13px; }
 
         /* 📱 HEADER ESTILO APP NATIVA */
         .app-header { background: #ffffff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
@@ -53,9 +53,10 @@
         .btn-primary { width: 100%; background: var(--primary); color: white; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3); transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.5px; }
         .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 86, 179, 0.3); }
 
-        /* 🧭 BOTTOM NAVIGATION BAR (MÓVIL) */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; display: flex; justify-content: space-around; padding: 10px 5px 15px 5px; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); border-top: 1px solid var(--border); z-index: 1000; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; font-size: 10px; font-weight: 700; width: 60px; transition: 0.3s; }
+        /* 🧭 BOTTOM NAVIGATION BAR (CON SCROLL HORIZONTAL) */
+        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; display: flex; padding: 10px 5px 15px 5px; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); border-top: 1px solid var(--border); z-index: 1000; overflow-x: auto; white-space: nowrap; -ms-overflow-style: none; scrollbar-width: none; }
+        .bottom-nav::-webkit-scrollbar { display: none; }
+        .nav-item { flex: 1; min-width: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; font-size: 9px; font-weight: 800; transition: 0.3s; padding: 0 5px;}
         .nav-item .icon { font-size: 20px; margin-bottom: 4px; transition: transform 0.2s; }
         .nav-item.activa { color: var(--primary); }
         .nav-item.activa .icon { transform: scale(1.2); }
@@ -67,7 +68,7 @@
         .pin-input { font-size: 28px; letter-spacing: 15px; text-align: center; padding: 15px; margin-top: 10px; border: 2px solid var(--border); font-family: monospace; }
         .pin-input:focus { border-color: var(--primary); }
 
-        /* 🔔 TOAST NOTIFICATIONS (Alertas Pro) */
+        /* 🔔 TOAST NOTIFICATIONS */
         .toast { visibility: hidden; min-width: 250px; background-color: var(--text-dark); color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
         .toast.show { visibility: visible; opacity: 1; bottom: 100px; }
         .loader-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -80,7 +81,6 @@
 <datalist id="opcionesClientes"></datalist>
 
 <div id="toast" class="toast">Notificación</div>
-
 <div id="loaderOverlay" class="loader-overlay">
     <div style="text-align: center;">
         <div class="spinner" style="margin: 0 auto 15px auto;"></div>
@@ -92,7 +92,6 @@
     <div class="login-card">
         <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
         <h3 style="color: var(--text-dark); margin-bottom: 25px;">PORTAL OPERATIVO</h3>
-        
         <div class="input-group">
             <label style="text-align: left;">USUARIO ASIGNADO</label>
             <select id="userInput">
@@ -106,19 +105,16 @@
                 <option value="ISDECOM">ISDECOM</option>
             </select>
         </div>
-        
         <div class="input-group">
             <label style="text-align: left;">PIN DE SEGURIDAD</label>
             <input type="password" id="pinInput" class="pin-input" placeholder="••••" autocomplete="off" inputmode="numeric">
         </div>
-        
         <p id="errorPin" style="color: var(--danger); display: none; font-weight: bold; margin-top: 10px; font-size: 12px;">❌ PIN INCORRECTO</p>
         <button id="btnDesbloquear" class="btn-primary" style="margin-top: 10px;">INICIAR SESIÓN</button>
     </div>
 </div>
 
 <div id="appScreen" style="display: none;">
-    
     <div class="app-header">
         <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
         <div id="displayUsuario" class="user-badge">👤 TÉCNICO</div>
@@ -139,10 +135,7 @@
                     <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" required></div>
                     <div class="input-group"><label>SEDE</label><input type="text" id="sedeR"></div>
                     <div class="input-group"><label>TIPO DE VISITA *</label>
-                        <select id="tipoVisitaR" required>
-                            <option value="" disabled selected>Seleccione el tipo...</option>
-                            <option>MANTENIMIENTO</option><option>REPARACIÓN</option><option>INSTALACIÓN</option><option>PROYECTO</option><option>COTIZACIÓN</option><option>REVISIÓN</option><option>OTRO</option>
-                        </select>
+                        <select id="tipoVisitaR" required><option value="" disabled selected>Seleccione...</option><option>MANTENIMIENTO</option><option>REPARACIÓN</option><option>INSTALACIÓN</option><option>PROYECTO</option><option>COTIZACIÓN</option><option>REVISIÓN</option><option>OTRO</option></select>
                     </div>
                     <div class="input-group"><label>DESCRIPCIÓN DEL TRABAJO *</label><textarea id="servicioR" rows="3" required></textarea></div>
                     <div class="input-group"><label>MATERIALES UTILIZADOS *</label><textarea id="materialesR" rows="2" required></textarea></div>
@@ -181,68 +174,98 @@
                         <div class="input-group"><label>TELÉFONO *</label><input type="tel" id="telefonoD" required></div>
                         <div class="input-group"><label>CONTRASEÑA *</label><input type="text" id="contrasenaD" required></div>
                     </div>
-                    <div class="input-group"><label>DETALLES DEL EQUIPO (Marca/Modelo/SN) *</label><textarea id="equipoD" rows="2" required></textarea></div>
-                    <div class="input-group"><label>DAÑO O ACTIVIDAD REQUERIDA *</label><textarea id="actividadD" rows="3" required></textarea></div>
-                    <div class="input-group"><label>OBSERVACIONES ADICIONALES</label><textarea id="observacionesD" rows="2"></textarea></div>
+                    <div class="input-group"><label>EQUIPO (Marca/Modelo/SN) *</label><textarea id="equipoD" rows="2" required></textarea></div>
+                    <div class="input-group"><label>DAÑO O ACTIVIDAD *</label><textarea id="actividadD" rows="3" required></textarea></div>
+                    <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesD" rows="2"></textarea></div>
                     <div class="input-group"><label>📸 EVIDENCIAS DE INGRESO</label><input type="file" id="fotoUploadD" accept="image/*, video/*" multiple></div>
                     <button type="submit" class="btn-primary">GENERAR TICKET</button>
                 </form>
             </div>
         </div>
 
+        <div id="seccionCopy" class="seccion-formulario">
+            <div class="card">
+                <h2 class="card-title">🖨️ MÓDULO COPY</h2>
+                <form id="formCopy">
+                    <div class="input-group"><label>FECHA *</label><input type="date" id="fechaC" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteC" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>ACTIVIDAD / REPORTE *</label><textarea id="actividadC" rows="3" required></textarea></div>
+                    <div class="input-group"><label>TÉCNICO QUE DEJA *</label><select id="tecnicoDejaC" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>JUAN CAMILO COY</option><option>ANDRES FELIPE HENAO</option><option>CAMILO HERRERA</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option><option>FRANCISCO SANCHEZ</option><option>ALEXANDER</option><option>MAURICIO</option><option>COPY</option></select></div>
+                    <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesC" rows="2"></textarea></div>
+                    <div class="input-group"><label>📸 EVIDENCIAS (Opcional)</label><input type="file" id="fotoUploadC" accept="image/*, video/*" multiple></div>
+                    <button type="submit" class="btn-primary">REGISTRAR IMPRESORA</button>
+                </form>
+            </div>
         </div>
+
+        <div id="seccionElectronicos" class="seccion-formulario">
+            <div class="card">
+                <h2 class="card-title">🔌 TALLER ELECTRÓNICOS</h2>
+                <form id="formElectronicos">
+                    <div class="input-group"><label>FECHA *</label><input type="date" id="fechaE" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteE" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>DISPOSITIVO Y REPORTE *</label><textarea id="actividadE" rows="3" required></textarea></div>
+                    <div class="input-group"><label>ASIGNADO A *</label><select id="electronicoE" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>ALEXANDER RAMIREZ</option><option>LAPTECH</option></select></div>
+                    <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesE" rows="2"></textarea></div>
+                    <button type="submit" class="btn-primary">REGISTRAR DISPOSITIVO</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="seccionSemaforo" class="seccion-formulario">
+            <div class="card">
+                <h2 class="card-title">🚦 SEMÁFORO DE TAREAS</h2>
+                <form id="formSemaforo">
+                    <div class="input-group"><label>FECHA *</label><input type="date" id="fechaS" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteS" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>ACTIVIDAD A REALIZAR *</label><textarea id="actividadS" rows="3" required></textarea></div>
+                    <div class="grid-2">
+                        <div class="input-group"><label>ASIGNADO POR *</label><select id="asignadoPorS" required><option value="" disabled selected>Seleccione...</option><option>SIN ASIGNAR</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option></select></div>
+                        <div class="input-group"><label>REVISADO POR</label><select id="revisadoPorS"><option value="" disabled selected>Seleccione...</option><option>SIN ASIGNAR</option><option>JUAN CAMILO COY</option><option>FRANCISCO SANCHEZ</option></select></div>
+                    </div>
+                    <div class="input-group"><label>TIPO CLIENTE *</label><select id="tipoClienteS" required><option value="" disabled selected>Seleccione...</option><option>CONTRATO</option><option>PARTICULAR</option><option>VIP</option></select></div>
+                    <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesS" rows="2"></textarea></div>
+                    <button type="submit" class="btn-primary">GUARDAR TAREA</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
 
     <div class="bottom-nav">
         <div class="nav-item activa" onclick="cambiarPestana('reporte')"><span class="icon">📝</span><span>Reporte</span></div>
         <div class="nav-item" onclick="cambiarPestana('agenda')"><span class="icon">📅</span><span>Agenda</span></div>
-        <div class="nav-item" onclick="cambiarPestana('dispositivos')"><span class="icon">🔬</span><span>Laborat.</span></div>
-        </div>
+        <div class="nav-item" onclick="cambiarPestana('dispositivos')"><span class="icon">🔬</span><span>Lab</span></div>
+        <div class="nav-item" onclick="cambiarPestana('copy')"><span class="icon">🖨️</span><span>Copy</span></div>
+        <div class="nav-item" onclick="cambiarPestana('electronicos')"><span class="icon">🔌</span><span>Taller</span></div>
+        <div class="nav-item" onclick="cambiarPestana('semaforo')"><span class="icon">🚦</span><span>Semáforo</span></div>
+    </div>
 </div>
 
 <script>
-    // ==========================================
-    // 🔐 DATOS DE CONFIGURACIÓN
-    // ==========================================
     const USUARIOS = { "JUAN CAMILO COY": "2905", "ANDRES FELIPE HENAO": "9666", "CAMILO HERRERA": "1053", "JUAN FELIPE LOPEZ": "5370", "FELIPE DE LOS RIOS": "1397", "FRANCISCO SANCHEZ": "1803", "ISDECOM": "5593" };
     
-    // 🔗 PEGA AQUÍ TU ENLACE DE APPS SCRIPT DE LA APP PRINCIPAL
+    // =========================================================
+    // 🔗 PEGA AQUÍ TU ENLACE DE APPS SCRIPT DE LA APP DE SERVICIOS
+    // =========================================================
     const apiURL = "https://script.google.com/macros/s/AKfycbySWEZLtq99Vw3G3DRtnAzfkiVlKFMUYcuJzqeMNbTA5jbCZ7Oc_cxk-PG9A6PTuBthNA/exec";
 
-    // ==========================================
-    // 🔔 FUNCIONES DE UI MODERNA (TOAST & LOADER)
-    // ==========================================
     function showToast(message, isError = false) {
         const toast = document.getElementById("toast");
-        toast.innerText = message;
-        toast.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
-        toast.classList.add("show");
-        setTimeout(() => { toast.classList.remove("show"); }, 3500);
+        toast.innerText = message; toast.style.backgroundColor = isError ? "var(--danger)" : "var(--success)";
+        toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 3500);
     }
-
-    function showLoader(show) {
-        document.getElementById("loaderOverlay").style.display = show ? "flex" : "none";
-    }
+    function showLoader(show) { document.getElementById("loaderOverlay").style.display = show ? "flex" : "none"; }
 
     function cambiarPestana(seccion) {
         document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('activa'));
         document.querySelectorAll('.seccion-formulario').forEach(s => s.classList.remove('activa'));
-        
-        // Activa el icono inferior
         event.currentTarget.classList.add('activa');
-        
-        // Muestra la tarjeta correcta
         let seccionId = 'seccion' + seccion.charAt(0).toUpperCase() + seccion.slice(1);
-        if(document.getElementById(seccionId)) {
-            document.getElementById(seccionId).classList.add('activa');
-            window.scrollTo(0,0);
-        }
+        if(document.getElementById(seccionId)) { document.getElementById(seccionId).classList.add('activa'); window.scrollTo(0,0); }
     }
 
-    // ==========================================
-    // 🔐 LÓGICA DE SESIÓN
-    // ==========================================
     let tInactividad; const T_LIMITE = 3 * 60 * 1000;
-    
     function cerrar() { localStorage.removeItem("isdecom"); localStorage.removeItem("isdecomUser"); document.getElementById("appScreen").style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; document.getElementById("pinInput").value = ""; document.getElementById("userInput").value = ""; window.scrollTo(0,0); }
     function reiniciarT() { clearTimeout(tInactividad); if(localStorage.getItem("isdecom")==="ok") tInactividad = setTimeout(cerrar, T_LIMITE); }
     window.onload=reiniciarT; document.onmousemove=reiniciarT; document.onkeypress=reiniciarT; document.ontouchstart=reiniciarT; document.onclick=reiniciarT;
@@ -251,9 +274,8 @@
     
     document.getElementById("btnDesbloquear").addEventListener("click", () => { 
         let user = document.getElementById("userInput").value; let pass = document.getElementById("pinInput").value;
-        if(user && USUARIOS[user] && USUARIOS[user] === pass) { 
-            localStorage.setItem("isdecom","ok"); localStorage.setItem("isdecomUser", user); iniciarApp(); 
-        } else { document.getElementById("errorPin").style.display="block"; document.getElementById("pinInput").value=""; }
+        if(user && USUARIOS[user] && USUARIOS[user] === pass) { localStorage.setItem("isdecom","ok"); localStorage.setItem("isdecomUser", user); iniciarApp(); } 
+        else { document.getElementById("errorPin").style.display="block"; document.getElementById("pinInput").value=""; }
     });
     
     document.getElementById("btnSalir").addEventListener("click", cerrar);
@@ -261,7 +283,7 @@
     function iniciarApp() { 
         document.getElementById("loginScreen").style.display="none"; document.getElementById("appScreen").style.display="block"; document.getElementById("errorPin").style.display="none"; 
         let usuarioActual = localStorage.getItem("isdecomUser") || "DESCONOCIDO";
-        document.getElementById("displayUsuario").innerHTML = `👤 <span>${usuarioActual.split(" ")[0]}</span>`; // Muestra solo el primer nombre
+        document.getElementById("displayUsuario").innerHTML = `👤 <span>${usuarioActual.split(" ")[0]}</span>`; 
         cargarClientes(); reiniciarT(); 
     }
 
@@ -276,9 +298,6 @@
         } else i.forEach(inp => inp.placeholder = "⚠️ MANUAL...");
     }
 
-    // ==========================================
-    // 📸 PROCESAMIENTO DE ARCHIVOS Y ENVÍO
-    // ==========================================
     function procesarArchivo(file) {
         return new Promise((res) => {
             const r = new FileReader(); r.readAsDataURL(file);
@@ -310,9 +329,13 @@
         return arr;
     }
 
+    // LISTENER PARA LOS 6 MÓDULOS
     document.getElementById('formReporte').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("reporte", await procArchivos('fotoUploadR'), 'formReporte'); });
-    document.getElementById('formDispositivos').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("dispositivos", await procArchivos('fotoUploadD'), 'formDispositivos'); });
     document.getElementById('formAgenda').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("agenda", [], 'formAgenda'); });
+    document.getElementById('formDispositivos').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("dispositivos", await procArchivos('fotoUploadD'), 'formDispositivos'); });
+    document.getElementById('formCopy').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("copy", await procArchivos('fotoUploadC'), 'formCopy'); });
+    document.getElementById('formElectronicos').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("electronicos", [], 'formElectronicos'); });
+    document.getElementById('formSemaforo').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("semaforo", [], 'formSemaforo'); });
 
     function enviar(tipo, arr, formId) {
         let usuarioActual = localStorage.getItem("isdecomUser") || "DESCONOCIDO";
@@ -321,6 +344,9 @@
         if (tipo==="reporte") { d = {...d, tipoVisita: v('tipoVisitaR'), fecha: v('fechaR'), horaInicio: v('horaInicioR'), horaFinal: v('horaFinalR'), cliente: v('clienteR'), sede: v('sedeR'), servicio: v('servicioR'), materiales: v('materialesR'), estado: v('estadoR'), tecnico: usuarioActual}; }
         else if (tipo==="agenda") { let agendarCal = document.getElementById('syncCalendarA').checked; d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), horaServicio: v('horaA'), cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: "PENDIENTE", observaciones: v('observacionesA')}; }
         else if (tipo==="dispositivos") { d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: "PENDIENTE", observaciones: v('observacionesD')}; }
+        else if (tipo==="copy") { d = {...d, fecha: v('fechaC'), cliente: v('clienteC'), actividad: v('actividadC'), tecnicoDeja: v('tecnicoDejaC'), estado: "PENDIENTE", observaciones: v('observacionesC')}; }
+        else if (tipo==="electronicos") { d = {...d, fecha: v('fechaE'), cliente: v('clienteE'), electronico: v('electronicoE'), actividad: v('actividadE'), estado: "PENDIENTE", observaciones: v('observacionesE')}; }
+        else if (tipo==="semaforo") { d = {...d, fecha: v('fechaS'), cliente: v('clienteS'), actividad: v('actividadS'), asignadoPor: v('asignadoPorS'), revisadoPor: v('revisadoPorS'), estado: "PENDIENTE", tipoCliente: v('tipoClienteS'), observaciones: v('observacionesS')}; }
 
         fetch(apiURL, { method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(d) })
         .then(r => r.json()).then(res => {
