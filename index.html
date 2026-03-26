@@ -7,68 +7,39 @@
     <meta name="theme-color" content="#ffffff">
     <link rel="apple-touch-icon" href="icono.png">
     <style>
-        /* 🎨 VARIABLES CORPORATIVAS (Alta Gama) */
-        :root {
-            --primary: #0056b3; 
-            --primary-light: #e6f0fa;
-            --secondary: #f8fafc;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
-            --danger: #ef4444;
-            --success: #10b981;
-            --border: #e2e8f0;
-            --bg-color: #f1f5f9;
-        }
-
+        :root { --primary: #0056b3; --primary-light: #e6f0fa; --secondary: #f8fafc; --text-dark: #1e293b; --text-muted: #64748b; --danger: #ef4444; --success: #10b981; --border: #e2e8f0; --bg-color: #f1f5f9; }
         body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-dark); margin: 0; padding: 0; padding-bottom: 80px; text-transform: uppercase; font-size: 13px; }
-
-        /* 📱 HEADER ESTILO APP NATIVA */
         .app-header { background: #ffffff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .app-header img { height: 32px; }
         .user-badge { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; display: flex; align-items: center; gap: 5px; }
         .btn-logout { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
-
-        /* 📦 CONTENEDOR DE TARJETAS */
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         .seccion-formulario { display: none; animation: fadeIn 0.3s ease-in-out; }
         .seccion-formulario.activa { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* 🃏 DISEÑO DE TARJETAS (CARDS) */
         .card { background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(226, 232, 240, 0.8); }
         .card-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary-light); padding-bottom: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;}
-
-        /* 📝 INPUTS Y FORMULARIOS MODERNOS */
         .input-group { margin-bottom: 18px; }
         label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; }
         input, select, textarea { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--secondary); color: var(--text-dark); font-weight: 600; font-size: 13px; box-sizing: border-box; transition: all 0.3s ease; }
         input:focus, select:focus, textarea:focus { border-color: var(--primary); background-color: #ffffff; outline: none; box-shadow: 0 0 0 4px var(--primary-light); }
         textarea { resize: none; }
         input[type="file"] { padding: 10px; border: 2px dashed var(--border); background: transparent; text-align: center; }
-        
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .checkbox-container { display: flex; align-items: center; gap: 10px; padding: 12px; background: var(--primary-light); border-radius: 10px; color: var(--primary); font-weight: 700; border: 1px solid #bfdbfe; cursor: pointer; margin-top: 10px; }
-
-        /* 🔘 BOTONES DE ALTO IMPACTO */
         .btn-primary { width: 100%; background: var(--primary); color: white; padding: 16px; border: none; border-radius: 12px; font-weight: 800; font-size: 14px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 86, 179, 0.3); transition: transform 0.2s, box-shadow 0.2s; letter-spacing: 0.5px; }
         .btn-primary:active { transform: translateY(2px); box-shadow: 0 2px 6px rgba(0, 86, 179, 0.3); }
-
-        /* 🧭 BOTTOM NAVIGATION BAR (CON SCROLL HORIZONTAL) */
         .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; display: flex; padding: 10px 5px 15px 5px; box-shadow: 0 -4px 20px rgba(0,0,0,0.06); border-top: 1px solid var(--border); z-index: 1000; overflow-x: auto; white-space: nowrap; -ms-overflow-style: none; scrollbar-width: none; }
         .bottom-nav::-webkit-scrollbar { display: none; }
         .nav-item { flex: 1; min-width: 60px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-muted); cursor: pointer; font-size: 9px; font-weight: 800; transition: 0.3s; padding: 0 5px;}
         .nav-item .icon { font-size: 20px; margin-bottom: 4px; transition: transform 0.2s; }
         .nav-item.activa { color: var(--primary); }
         .nav-item.activa .icon { transform: scale(1.2); }
-
-        /* 🔐 PANTALLA LOGIN */
         #loginScreen { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); }
         .login-card { background: white; padding: 40px 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); width: 100%; max-width: 350px; text-align: center; }
         .login-card img { height: 45px; margin-bottom: 25px; }
         .pin-input { font-size: 28px; letter-spacing: 15px; text-align: center; padding: 15px; margin-top: 10px; border: 2px solid var(--border); font-family: monospace; }
         .pin-input:focus { border-color: var(--primary); }
-
-        /* 🔔 TOAST NOTIFICATIONS */
         .toast { visibility: hidden; min-width: 250px; background-color: var(--text-dark); color: #fff; text-align: center; border-radius: 12px; padding: 16px; position: fixed; z-index: 9999; left: 50%; bottom: 90px; transform: translateX(-50%); font-weight: bold; font-size: 13px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
         .toast.show { visibility: visible; opacity: 1; bottom: 100px; }
         .loader-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.8); z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -154,7 +125,7 @@
                     <label class="checkbox-container"><input type="checkbox" id="syncCalendarA" style="width: auto;"> Sincronizar en Google Calendar</label>
                     <div class="input-group" style="margin-top: 15px;"><label>TAREA A REALIZAR *</label><textarea id="tareaA" rows="3" required></textarea></div>
                     <div class="grid-2">
-                        <div class="input-group"><label>FECHA *</label><input type="date" id="fechaA" required></div>
+                        <div class="input-group"><label>FECHA (Programada) *</label><input type="date" id="fechaA" required></div>
                         <div class="input-group"><label>HORA (Opcional)</label><input type="time" id="horaA"></div>
                     </div>
                     <div class="input-group"><label>ASIGNAR A *</label><select id="asignadoA" required><option value="" disabled selected>Seleccione...</option><option>ISDECOM</option></select></div>
@@ -185,7 +156,7 @@
 
         <div id="seccionCopy" class="seccion-formulario">
             <div class="card">
-                <h2 class="card-title">🖨️ MÓDULO IMPRESORAS</h2>
+                <h2 class="card-title">🖨️ IMPRESORAS</h2>
                 <form id="formCopy">
                     <div class="input-group"><label>FECHA *</label><input type="date" id="fechaC" required></div>
                     <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteC" class="inputClienteCompartido" required></div>
@@ -248,7 +219,7 @@
     // =========================================================
     // 🔗 PEGA AQUÍ TU ENLACE DE APPS SCRIPT DE LA APP DE SERVICIOS
     // =========================================================
-    const apiURL = "https://script.google.com/macros/s/AKfycbySWEZLtq99Vw3G3DRtnAzfkiVlKFMUYcuJzqeMNbTA5jbCZ7Oc_cxk-PG9A6PTuBthNA/exec";
+    const apiURL = "https://script.google.com/macros/s/AKfycby7ezuc67woI3MNOsd4DNO3r51ntrrhZhD2Z7daW_RjIhtpsdSNHvofDp54Ijpgpk7jgw/exec";
 
     function showToast(message, isError = false) {
         const toast = document.getElementById("toast");
@@ -329,6 +300,17 @@
         return arr;
     }
 
+    // ✅ FUNCIÓN CONVERSORA DE HORA (14:30 -> 02:30 PM)
+    function formatearAMPM(hora24) {
+        if (!hora24) return "";
+        let [horas, minutos] = hora24.split(':');
+        horas = parseInt(horas, 10);
+        let ampm = horas >= 12 ? 'PM' : 'AM';
+        horas = horas % 12;
+        horas = horas ? horas : 12;
+        return horas.toString().padStart(2, '0') + ':' + minutos + ' ' + ampm;
+    }
+
     // LISTENER PARA LOS 6 MÓDULOS
     document.getElementById('formReporte').addEventListener('submit', async (e) => { e.preventDefault(); showLoader(true); enviar("reporte", await procArchivos('fotoUploadR'), 'formReporte'); });
     document.getElementById('formAgenda').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("agenda", [], 'formAgenda'); });
@@ -337,28 +319,55 @@
     document.getElementById('formElectronicos').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("electronicos", [], 'formElectronicos'); });
     document.getElementById('formSemaforo').addEventListener('submit', (e) => { e.preventDefault(); showLoader(true); enviar("semaforo", [], 'formSemaforo'); });
 
+    // ✅ FUNCIÓN ENVIAR MAESTRA CON INYECCIÓN DE USUARIO Y HORA AM/PM
     function enviar(tipo, arr, formId) {
         let usuarioActual = localStorage.getItem("isdecomUser") || "DESCONOCIDO";
-        let d = { tipoFormulario: tipo, fotos: arr };
+        let d = { tipoFormulario: tipo, fotos: arr, tecnico: usuarioActual }; // Inyección global
         
-        if (tipo==="reporte") { d = {...d, tipoVisita: v('tipoVisitaR'), fecha: v('fechaR'), horaInicio: v('horaInicioR'), horaFinal: v('horaFinalR'), cliente: v('clienteR'), sede: v('sedeR'), servicio: v('servicioR'), materiales: v('materialesR'), estado: v('estadoR'), tecnico: usuarioActual}; }
-        else if (tipo==="agenda") { let agendarCal = document.getElementById('syncCalendarA').checked; d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), horaServicio: v('horaA'), cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: "PENDIENTE", observaciones: v('observacionesA')}; }
-        else if (tipo==="dispositivos") { d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: "PENDIENTE", observaciones: v('observacionesD')}; }
-        else if (tipo==="copy") { d = {...d, fecha: v('fechaC'), cliente: v('clienteC'), actividad: v('actividadC'), tecnicoDeja: v('tecnicoDejaC'), estado: "PENDIENTE", observaciones: v('observacionesC')}; }
-        else if (tipo==="electronicos") { d = {...d, fecha: v('fechaE'), cliente: v('clienteE'), electronico: v('electronicoE'), actividad: v('actividadE'), estado: "PENDIENTE", observaciones: v('observacionesE')}; }
-        else if (tipo==="semaforo") { d = {...d, fecha: v('fechaS'), cliente: v('clienteS'), actividad: v('actividadS'), asignadoPor: v('asignadoPorS'), revisadoPor: v('revisadoPorS'), estado: "PENDIENTE", tipoCliente: v('tipoClienteS'), observaciones: v('observacionesS')}; }
+        if (tipo==="reporte") { 
+            d = {...d, tipoVisita: v('tipoVisitaR'), fecha: v('fechaR'), 
+                 horaInicio: formatearAMPM(v('horaInicioR')), // Conversión a AM/PM
+                 horaFinal: formatearAMPM(v('horaFinalR')),   // Conversión a AM/PM
+                 cliente: v('clienteR'), sede: v('sedeR'), servicio: v('servicioR'), materiales: v('materialesR'), estado: v('estadoR')}; 
+        }
+        else if (tipo==="agenda") { 
+            let agendarCal = document.getElementById('syncCalendarA').checked; 
+            d = {...d, syncCalendar: agendarCal, fechaServicio: v('fechaA'), 
+                 horaServicio: formatearAMPM(v('horaA')),     // Conversión a AM/PM
+                 cliente: v('clienteA'), tarea: v('tareaA'), asignado: v('asignadoA'), estado: "PENDIENTE", observaciones: v('observacionesA')}; 
+        }
+        else if (tipo==="dispositivos") { 
+            d = {...d, fecha: v('fechaD'), cliente: v('clienteD'), telefono: v('telefonoD'), equipo: v('equipoD'), contrasena: v('contrasenaD'), actividad: v('actividadD'), estado: "PENDIENTE", observaciones: v('observacionesD')}; 
+        }
+        else if (tipo==="copy") { 
+            d = {...d, fecha: v('fechaC'), cliente: v('clienteC'), actividad: v('actividadC'), tecnicoDeja: v('tecnicoDejaC'), estado: "PENDIENTE", observaciones: v('observacionesC')}; 
+        }
+        else if (tipo==="electronicos") { 
+            d = {...d, fecha: v('fechaE'), cliente: v('clienteE'), electronico: v('electronicoE'), actividad: v('actividadE'), estado: "PENDIENTE", observaciones: v('observacionesE')}; 
+        }
+        else if (tipo==="semaforo") { 
+            d = {...d, fecha: v('fechaS'), cliente: v('clienteS'), actividad: v('actividadS'), asignadoPor: v('asignadoPorS'), revisadoPor: v('revisadoPorS'), estado: "PENDIENTE", tipoCliente: v('tipoClienteS'), observaciones: v('observacionesS')}; 
+        }
 
         fetch(apiURL, { method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(d) })
         .then(r => r.json()).then(res => {
             if (tipo === 'reporte') {
-                const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n👷‍♂️ *Técnico:* " + usuarioActual + "\n🏢 *Cliente:* " + v('clienteR') + "\n⏱️ *Horario:* " + v('horaInicioR') + " a " + v('horaFinalR') + "\n\n📝 *Descripción del Servicio:*\n" + v('servicioR');
+                const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n👷‍♂️ *Técnico:* " + usuarioActual + "\n🏢 *Cliente:* " + v('clienteR') + "\n⏱️ *Horario:* " + formatearAMPM(v('horaInicioR')) + " a " + formatearAMPM(v('horaFinalR')) + "\n\n📝 *Descripción del Servicio:*\n" + v('servicioR');
                 window.open("https://api.whatsapp.com/send?text=" + encodeURIComponent(mensajeWa), '_blank');
             }
             showLoader(false);
-            if (tipo==='dispositivos') showToast("✅ TICKET CREADO: " + res.idGenerado); else showToast("✅ DATOS GUARDADOS CON ÉXITO.");
-            document.getElementById(formId).reset(); window.scrollTo(0, 0); cargarClientes();
-        }).catch(() => { showLoader(false); showToast("❌ ERROR AL CONECTAR AL SERVIDOR.", true); });
+            if (tipo==='dispositivos') showToast("✅ TICKET CREADO: " + res.idGenerado); 
+            else showToast("✅ DATOS GUARDADOS CON ÉXITO.");
+            
+            document.getElementById(formId).reset(); 
+            window.scrollTo(0, 0); 
+            cargarClientes();
+        }).catch(() => { 
+            showLoader(false); 
+            showToast("❌ ERROR AL CONECTAR AL SERVIDOR.", true); 
+        });
     }
+    
     function v(id) { return document.getElementById(id) ? document.getElementById(id).value : ""; }
 </script>
 </body>
