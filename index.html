@@ -219,8 +219,7 @@
     const USUARIOS = { "JUAN CAMILO COY": "2905", "ANDRES FELIPE HENAO": "9666", "CAMILO HERRERA": "1053", "JUAN FELIPE LOPEZ": "5370", "FELIPE DE LOS RIOS": "1397", "FRANCISCO SANCHEZ": "1803", "ELIANA": "5593" };
     
     // =========================================================
-    // ⚠️ PEGA AQUÍ LA NUEVA URL QUE GENERASTE HOY ⚠️
-    // Si la anterior funcionaba, déjala. Si generaste una nueva, cámbiala.
+    // ENLACE A TU BASE DE DATOS
     // =========================================================
     const apiURL = "https://script.google.com/macros/s/AKfycbzQah9uIwHWAPityBTuPbCmJFljN_ddCs-F8ig9Q8YsczyNQ67RVc2sQOWOGkQnkbc6Og/exec";
 
@@ -287,28 +286,36 @@
     }
 
     // ==========================================
-    // 🔗 MOTOR DE DESCARGA (CON DIAGNÓSTICO FETCH)
+    // 🔗 MOTOR DE RASTREO EXTREMO (DIAGNÓSTICO)
     // ==========================================
     function cargarClientes() {
-        if(apiURL.includes("https://script.google.com/macros/s/AKfycbzQah9uIwHWAPityBTuPbCmJFljN_ddCs-F8ig9Q8YsczyNQ67RVc2sQOWOGkQnkbc6Og/exec")) return; 
+        alert("PASO 1: Iniciando conexión...");
+        
+        if(apiURL.includes("https://script.google.com/macros/s/AKfycbzQah9uIwHWAPityBTuPbCmJFljN_ddCs-F8ig9Q8YsczyNQ67RVc2sQOWOGkQnkbc6Og/exec")) {
+            alert("ERROR: Aún dice PEGAR_AQUI en la URL.");
+            return; 
+        }
         
         const inputs = document.querySelectorAll('.inputClienteCompartido');
         inputs.forEach(inp => inp.placeholder = "⏳ CONECTANDO...");
         
-        fetch(apiURL)
+        alert("PASO 2: La URL configurada empieza con: " + apiURL.substring(0, 40) + "...");
+        
+        fetch(apiURL, { redirect: "follow" })
         .then(response => {
+            alert("PASO 3: Google respondió con status: " + response.status);
             if (!response.ok) throw new Error("Error HTTP " + response.status);
             return response.json();
         })
         .then(datos => {
-            // Si el Cerebro reporta un error de Excel
+            alert("PASO 4: Datos recibidos perfectamente.");
+            
             if (datos.error_servidor) {
-                alert("ERROR EN EXCEL: " + datos.error_servidor);
+                alert("ERROR INTERNO DE EXCEL: " + datos.error_servidor);
                 inputs.forEach(inp => inp.placeholder = "❌ ERROR EXCEL");
                 return;
             }
 
-            // Llenar la lista
             const lista = document.getElementById('opcionesClientes');
             lista.innerHTML = ''; 
             if(datos && datos.length > 0){ 
@@ -316,14 +323,14 @@
                     let o = document.createElement('option'); o.value = c; lista.appendChild(o); 
                 }); 
                 inputs.forEach(inp => inp.placeholder = "✅ " + datos.length + " LISTOS");
+                alert("PASO 5: ¡ÉXITO! Clientes inyectados en la lista.");
             } else {
                 inputs.forEach(inp => inp.placeholder = "⚠️ SIN CLIENTES");
             }
         })
         .catch(error => {
-            // Si el navegador bloquea la conexión, imprimimos el error en la pantalla
+            alert("PASO X (Fallo): El celular bloqueó la conexión. Motivo: " + error.message);
             inputs.forEach(inp => inp.placeholder = "❌ BLOQUEADO");
-            alert("MOTIVO DEL BLOQUEO: " + error.message);
         });
     }
 
