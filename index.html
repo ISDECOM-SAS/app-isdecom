@@ -219,13 +219,12 @@
     const USUARIOS = { "JUAN CAMILO COY": "2905", "ANDRES FELIPE HENAO": "9666", "CAMILO HERRERA": "1053", "JUAN FELIPE LOPEZ": "5370", "FELIPE DE LOS RIOS": "1397", "FRANCISCO SANCHEZ": "1803", "ELIANA": "5593" };
     
     // =========================================================
-    // ⚠️⚠️ PEGA AQUÍ TU NUEVO ENLACE DE APPS SCRIPT ⚠️⚠️
-    // Recuerda que debiste generarlo como: "Ejecutar como: YO" y "Acceso: CUALQUIER PERSONA"
+    // PEGA AQUÍ TU ENLACE DE APPS SCRIPT
     // =========================================================
     const apiURL = "https://script.google.com/macros/s/AKfycbyXXuJ-ftSIOVSXCyENiIM6CuGZt1dvZNpaRM_2s0pycMqX-x6WDy6_P6aTEkfcZODG9g/exec";
 
     // ==========================================
-    // ✅ INTERCEPTOR GLOBAL: FORZAR MAYÚSCULAS
+    // INTERCEPTOR GLOBAL: FORZAR MAYÚSCULAS
     // ==========================================
     document.addEventListener('input', function (e) {
         if ((e.target.tagName === 'INPUT' && e.target.type !== 'password' && e.target.type !== 'date' && e.target.type !== 'time') || e.target.tagName === 'TEXTAREA') {
@@ -287,7 +286,7 @@
     }
 
     // ==========================================
-    // 🔗 CONEXIÓN BLINDADA JSONP (ANTI-BLOQUEOS)
+    // CONEXIÓN BLINDADA JSONP
     // ==========================================
     function cargarClientes() {
         if(apiURL.includes("https://script.google.com/macros/s/AKfycbyXXuJ-ftSIOVSXCyENiIM6CuGZt1dvZNpaRM_2s0pycMqX-x6WDy6_P6aTEkfcZODG9g/exec")) return; 
