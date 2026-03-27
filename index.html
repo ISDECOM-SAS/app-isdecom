@@ -102,7 +102,7 @@
                         <div class="input-group"><label>HORA INICIO *</label><input type="time" id="horaInicioR" required></div>
                         <div class="input-group"><label>HORA FINAL *</label><input type="time" id="horaFinalR" required></div>
                     </div>
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteR" class="inputClienteCompartido" autocomplete="off" required></div>
                     <div class="input-group"><label>SEDE (Opcional)</label><input type="text" id="sedeR"></div>
                     <div class="input-group"><label>TIPO DE VISITA *</label>
                         <select id="tipoVisitaR" required><option value="" disabled selected>Seleccione...</option><option>MANTENIMIENTO</option><option>REPARACIÓN</option><option>INSTALACIÓN</option><option>PROYECTO</option><option>COTIZACIÓN</option><option>REVISIÓN</option><option>OTRO</option></select>
@@ -128,7 +128,7 @@
             <div class="card">
                 <h2 class="card-title">📅 NUEVA CITA</h2>
                 <form id="formAgenda">
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteA" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteA" class="inputClienteCompartido" autocomplete="off" required></div>
                     <label class="checkbox-container"><input type="checkbox" id="syncCalendarA" style="width: auto;"> Sincronizar en Google Calendar</label>
                     <div class="input-group" style="margin-top: 15px;"><label>TAREA A REALIZAR *</label><textarea id="tareaA" rows="3" required></textarea></div>
                     <div class="grid-2">
@@ -146,7 +146,7 @@
             <div class="card">
                 <h2 class="card-title">🔬 INGRESO A LABORATORIO</h2>
                 <form id="formDispositivos">
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteD" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteD" class="inputClienteCompartido" autocomplete="off" required></div>
                     <div class="grid-2">
                         <div class="input-group"><label>TELÉFONO *</label><input type="tel" id="telefonoD" required></div>
                         <div class="input-group"><label>CONTRASEÑA *</label><input type="text" id="contrasenaD" required></div>
@@ -164,7 +164,7 @@
             <div class="card">
                 <h2 class="card-title">🖨️ MÓDULO IMPRESORAS</h2>
                 <form id="formImpresoras">
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteI" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteI" class="inputClienteCompartido" autocomplete="off" required></div>
                     <div class="input-group"><label>ACTIVIDAD / REPORTE *</label><textarea id="actividadI" rows="3" required></textarea></div>
                     <div class="input-group"><label>TÉCNICO QUE DEJA *</label><select id="tecnicoDejaI" required><option value="" disabled selected>SELECCIONE...</option><option>NINGUNO</option><option>JUAN CAMILO COY</option><option>ANDRES FELIPE HENAO</option><option>CAMILO HERRERA</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option><option>FRANCISCO SANCHEZ</option><option>ALEXANDER</option><option>COPY</option></select></div>
                     <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesI" rows="2"></textarea></div>
@@ -178,7 +178,7 @@
             <div class="card">
                 <h2 class="card-title">🔌 TALLER ELECTRÓNICOS</h2>
                 <form id="formElectronicos">
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteE" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteE" class="inputClienteCompartido" autocomplete="off" required></div>
                     <div class="input-group"><label>DISPOSITIVO Y REPORTE *</label><textarea id="actividadE" rows="3" required></textarea></div>
                     <div class="input-group"><label>ASIGNADO A *</label><select id="electronicoE" required><option value="" disabled selected>SELECCIONE...</option><option>ALEXANDER</option><option>LAPTECH</option></select></div>
                     <div class="input-group"><label>OBSERVACIONES</label><textarea id="observacionesE" rows="2"></textarea></div>
@@ -192,7 +192,7 @@
             <div class="card">
                 <h2 class="card-title">🚦 SEMÁFORO DE TAREAS</h2>
                 <form id="formSemaforo">
-                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteS" class="inputClienteCompartido" required></div>
+                    <div class="input-group"><label>CLIENTE *</label><input list="opcionesClientes" id="clienteS" class="inputClienteCompartido" autocomplete="off" required></div>
                     <div class="input-group"><label>ACTIVIDAD A REALIZAR *</label><textarea id="actividadS" rows="3" required></textarea></div>
                     <div class="grid-2">
                         <div class="input-group"><label>ASIGNADO POR *</label><select id="asignadoPorS" required><option value="" disabled selected>Seleccione...</option><option>FELIPE DE LOS RIOS</option><option>JUAN FELIPE LOPEZ</option></select></div>
