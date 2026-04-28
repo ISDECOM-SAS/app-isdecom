@@ -13,12 +13,12 @@
         .app-header { background: #ffffff; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
         .app-header img { height: 32px; }
         .user-badge { background: var(--primary-light); color: var(--primary); padding: 6px 12px; border-radius: 20px; font-weight: 700; font-size: 11px; display: flex; align-items: center; gap: 5px; }
-        .btn-logout { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); }
+        .btn-logout { background: transparent; border: none; font-size: 20px; cursor: pointer; color: var(--text-muted); font-weight: bold;}
         .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         .seccion-formulario { display: none; animation: fadeIn 0.3s ease-in-out; }
         .seccion-formulario.activa { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .card { background: #ffffff; border-radius: 16px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .card { background: #ffffff; border-radius: 166px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.04); border: 1px solid rgba(226, 232, 240, 0.8); }
         .card-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-top: 0; border-bottom: 2px solid var(--primary-light); padding-bottom: 12px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;}
         .input-group { margin-bottom: 18px; }
         label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; }
@@ -90,7 +90,7 @@
     <div class="app-header">
         <img src="https://drive.google.com/thumbnail?id=1eVECUsGoJe41dSoOIG0uWgzElK70Uqj-&sz=w500" alt="ISDECOM">
         <div id="displayUsuario" class="user-badge">👤 TÉCNICO</div>
-        <button id="btnSalir" class="btn-logout">🚪</button>
+        <button id="btnSalir" class="btn-logout">⏻</button>
     </div>
 
     <div class="container">
@@ -219,9 +219,6 @@
 <script>
     const USUARIOS = { "JUAN CAMILO COY": "2905", "ANDRES FELIPE HENAO": "9666", "CAMILO HERRERA": "1053", "JUAN FELIPE LOPEZ": "5370", "FELIPE DE LOS RIOS": "1397", "FRANCISCO SANCHEZ": "1803", "ELIANA": "5593" };
     
-    // ==========================================
-    // 🔗 URL DE TU API DE GOOGLE
-    // ==========================================
     const apiURL = "https://script.google.com/macros/s/AKfycbz8tPrgLOl3lJ53_SLoe6BbcnnTTSSSV1yF9c4RCUvIrpoaCHIeGYCTlbCLxRkNwIB2uQ/exec";
 
     document.addEventListener('input', function (e) {
@@ -345,14 +342,9 @@
 
         fetch(apiURL, { method: 'POST', headers: {'Content-Type': 'text/plain'}, body: JSON.stringify(d) })
         .then(r => r.json()).then(res => {
-            // ========================================================
-            // CONFIRMADO: SOLO SE MODIFICÓ LA RUTA A api.whatsapp.com
-            // PARA PROTEGER LOS EMOJIS (✅ 👷‍♂️ 🏢) Y EVITAR BLOQUEOS
-            // ========================================================
             if (tipo === 'reporte') {
                 const mensajeWa = "✅ *NUEVO REPORTE ISDECOM*\n\n👷‍♂️ *Técnico:* " + usuarioActual + "\n🏢 *Cliente:* " + v('clienteR') + "\n⏱️ *Horario:* " + formatearAMPM(v('horaInicioR')) + " a " + formatearAMPM(v('horaFinalR')) + "\n\n📝 *Descripción del Servicio:*\n" + v('servicioR');
                 
-                // Usamos api.whatsapp.com para que respete el formato UTF-8
                 const urlWa = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensajeWa);
                 
                 const linkObj = document.createElement('a');
@@ -362,7 +354,6 @@
                 linkObj.click();
                 document.body.removeChild(linkObj);
             }
-            // ========================================================
             
             showLoader(false);
             if (tipo==='dispositivos') showToast("✅ TICKET CREADO: " + res.idGenerado); 
